@@ -30,9 +30,9 @@ public class GridMonitor implements GridMonitorInterface {
 		int c = scan.nextInt();
 		grid = new double[r][c];
 		scan.nextLine();
-		for(int x = 0; x < r; x++) {
-			for(int y = 0; y < c; y++) {
-				grid[x][y] = scan.nextDouble();
+		for(int y = 0; y < r; y++) {
+			for(int x = 0; x < c; x++) {
+				grid[y][x] = scan.nextDouble();
 			}
 		}
 		scan.close();
@@ -84,7 +84,7 @@ public class GridMonitor implements GridMonitorInterface {
 		double[][] rVal = new double[grid.length][grid[0].length];
 		for(int y = 0; y < grid.length; y++) {
 			for(int x = 0; x < grid[0].length; x++) {
-				rVal[x][y] = sum[x][y]/4;
+				rVal[y][x] = sum[y][x]/4;
 			}
 		}
 		return rVal;
@@ -101,7 +101,7 @@ public class GridMonitor implements GridMonitorInterface {
 		double[][] rVal = new double[grid.length][grid[0].length];
 		for(int y = 0; y < grid.length; y++) {
 			for(int x = 0; x < grid[0].length; x++) {
-				rVal[x][y] = avg[x][y]/2;
+				rVal[y][x] = Math.abs(avg[y][x]/2);
 			}
 		}
 		return rVal;
@@ -110,7 +110,7 @@ public class GridMonitor implements GridMonitorInterface {
 	/**
 	 * Calculates witch cells are in dangers
 	 * 
-	 * @return true if going bad false if good
+	 * @return each cell returns true of false, a cell will return true if it is failing and false if it is working functionaly
 	 */
 	@Override
 	public boolean[][] getDangerGrid() {
@@ -119,7 +119,7 @@ public class GridMonitor implements GridMonitorInterface {
 		double[][] delta = this.getDeltaGrid();
 		for(int y = 0; y < grid.length; y++) {
 			for(int x = 0; x < grid[0].length; x++) {
-				rVal[x][y] = !((delta[x][y] < grid[x][y]) &&(grid[x][y] < avg[x][y]+delta[x][y]));
+				rVal[y][x] = !((avg[y][x]-delta[y][x] < grid[y][x]) &&(grid[y][x] < avg[y][x]+delta[y][x]));
 			}
 		}
 		return rVal;
