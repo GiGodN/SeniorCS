@@ -29,25 +29,29 @@ public class Day3 {
 			if(m[y][x].charAt(0) == '#') trees1++;
 			x = (x+1)%31;
 		}
+		System.out.println(trees1);
 		x=0;
 		int trees2 = 0;
 		for(int y = 0; y < m.length; y++) {
 			if(m[y][x].charAt(0) == '#') trees2++;
 			x = (x+5)%31;
 		}
+		System.out.println(trees2);
 		x=0;
 		int trees3 = 0;
 		for(int y = 0; y < m.length; y++) {
 			if(m[y][x].charAt(0) == '#') trees3++;
 			x = (x+7)%31;
 		}
+		System.out.println(trees3);
 		x=0;
 		int trees4 = 0;
 		for(int y = 0; y < m.length; y+=2) {
 			if(m[y][x].charAt(0) == '#') trees4++;
 			x = (x+1)%31;
 		}
-		System.out.println(trees * trees1 * trees2 * trees3 * trees4);
+		System.out.println(trees4);
+		System.out.println((long)trees * trees1 * trees2 * trees3 * trees4);
 		s.close();
 	}
 	
