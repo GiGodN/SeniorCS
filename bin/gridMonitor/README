@@ -11,4 +11,41 @@ OVERVIEW:
 	
 INCLUDED FILES: 
 
-	* 
+	* GridMonitor.java - source file
+	* GridMonitorInterface.java - source file
+	* GridMonitorTest.java - source file
+	* negatives.txt - reference file
+	* oneByOne.txt - reference file
+	* README - this file
+	* sample.txt - reference file
+	* sample4x5.txt - reference file
+	* sampleDoubles.txt - reference file
+	* widRange.txt - reference file
+	
+COMPILING AND RUNNING:
+
+	From the directory containing all the files, compile the tester class with the command:
+	$ javac GridMonitorTest.java
+	
+	Run the compiled class file with the command:
+	$ java GridMonitorTest
+	
+	Console output will reflect the test results
+	
+PROGRAM DESIGN AND IMPORTANT CONCEPTS:
+
+	This project was designed to teach us how to manipulate and control two dimensional arrays.
+	This project helped us learn the concepts of inheritance and encapsulation by requiring the
+	use of an interface in order to implement the needed methods. This project taught me how to
+	manipulate and control a 2 dimensional array.
+	
+TESTING:
+
+	I used the provided tester class, along with a small class designed to print the output 2D arrays
+	
+DISCUSSION:
+
+	I took a little bit to figure out how to return a clone of a 2D array, so the array was 
+	encapsulated properly. The Surrounding Sum Grid was hard because of the logic around 
+	the edges of the grid.
+	

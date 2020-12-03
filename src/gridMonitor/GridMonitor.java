@@ -45,7 +45,12 @@ public class GridMonitor implements GridMonitorInterface {
 	 */
 	@Override
 	public double[][] getBaseGrid() {
-		return grid;
+		double[][] ret = new double[grid.length][grid[0].length];
+		for(int i = 0; i < grid.length; i++) {
+			ret[i] = grid[i].clone();
+		}
+		return ret;
+		
 	}
 
 	/**
