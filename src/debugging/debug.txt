@@ -1,0 +1,1 @@
+emptySet_testIsEmpty caused me to find the error in the add function where it doesnt incrament the rear varable
