@@ -66,12 +66,13 @@ public class Day5 {
 			int mid = (l+r)/2;
 			if(val[mid] != mid+36 && val[mid-1] == mid+35) {
 				rval = mid+36;
+				break;
 			}
 			if (val[mid] == mid+36) {
 				l = mid-1;
 			}
 			else {
-				l = mid+1;
+				r = mid+1;
 			}
 		}
 		System.out.println(rval);
