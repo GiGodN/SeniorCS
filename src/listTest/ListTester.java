@@ -142,6 +142,8 @@ public class ListTester {
 		String STRING_A = "A";
 		Integer[] LIST_B = {ELEMENT_B};
 		String STRING_B = "B";
+		Integer[] LIST_AB = {ELEMENT_A, ELEMENT_B};
+		String STRING_AB = "AB";
 		Integer[] LIST_BA = {ELEMENT_B, ELEMENT_A};
 		String STRING_BA = "BA";
 		Integer[] LIST_BC = {ELEMENT_B, ELEMENT_C};
@@ -162,8 +164,16 @@ public class ListTester {
 		testSingleElementList(emptyList_add0A_A, "emptyList_add0A_A", LIST_A, STRING_A);
 		//1-element to empty list
 		testEmptyList(A_removeA_emptyList, "A_removeA_emptyList");
+		testEmptyList(A_remove0_emptyList, "A_remove0_emptyList");
+		testEmptyList(A_removeFirst_emptyList, "A_removeFirst_emptyList");
+		testEmptyList(A_removeLast_emptyList, "A_removeLast_emptyList");
 		//1-element to 2-element
 		testTwoElementList(A_addToFrontB_BA, "A_addToFrontB_BA", LIST_BA, STRING_BA);
+		testTwoElementList(A_addToRearB_AB, "A_addToRearB_AB", LIST_AB, STRING_AB);
+		testTwoElementList(A_addB_AB, "A_addB_AB", LIST_AB, STRING_AB);
+		testTwoElementList(A_add0B_BA, "A_add0B_BA", LIST_BA, STRING_BA);
+		testTwoElementList(A_add1B_AB, "A_add1B_AB", LIST_AB, STRING_AB);
+		testTwoElementList(A_addAfterA_AB, "A_addAfterA_AB", LIST_AB, STRING_AB);
 		//1-element to changed 1-element via set()
 		testSingleElementList(A_set0B_B, "A_set0B_B", LIST_B, STRING_B);
 		//2-element to 1-element
@@ -257,16 +267,6 @@ public class ListTester {
 		return list;
 	}
 	private Scenario<Integer> emptyList_add0A_A = () -> emptyList_add0A_A();
-
-	/** Scenario: [A] -> addToFront(B) -> [B,A] 
-	 * @return [B,A] after addToFront(B)
-	 */
-	private IndexedUnsortedList<Integer> A_addToFrontB_BA() {
-		IndexedUnsortedList<Integer> list = emptyList_addToFrontA_A(); 
-		list.addToFront(ELEMENT_B);
-		return list;
-	}
-	private Scenario<Integer> A_addToFrontB_BA = () -> A_addToFrontB_BA();
 	
 	private IndexedUnsortedList<Integer> A_removeA_emptyList() {
 		IndexedUnsortedList<Integer> list = emptyList_addToFrontA_A();
@@ -274,6 +274,69 @@ public class ListTester {
 		return list;
 	}
 	private Scenario<Integer> A_removeA_emptyList = () -> A_removeA_emptyList();
+	
+	private IndexedUnsortedList<Integer> A_remove0_emptyList() {
+		IndexedUnsortedList<Integer> list = emptyList_addToFrontA_A();
+		list.remove(0);
+		return list;
+	}
+	private Scenario<Integer> A_remove0_emptyList = () -> A_remove0_emptyList();
+	
+	private IndexedUnsortedList<Integer> A_removeFirst_emptyList() {
+		IndexedUnsortedList<Integer> list = emptyList_addToFrontA_A();
+		list.removeFirst();
+		return list;
+	}
+	private Scenario<Integer> A_removeFirst_emptyList = () -> A_removeFirst_emptyList();
+	
+	private IndexedUnsortedList<Integer> A_removeLast_emptyList() {
+		IndexedUnsortedList<Integer> list = emptyList_addToFrontA_A();
+		list.removeLast();
+		return list;
+	}
+	private Scenario<Integer> A_removeLast_emptyList = () -> A_removeLast_emptyList();
+	
+	private IndexedUnsortedList<Integer> A_addToFrontB_BA() {
+		IndexedUnsortedList<Integer> list = emptyList_addToFrontA_A(); 
+		list.addToFront(ELEMENT_B);
+		return list;
+	}
+	private Scenario<Integer> A_addToFrontB_BA = () -> A_addToFrontB_BA();
+	
+	private IndexedUnsortedList<Integer> A_addToRearB_AB() {
+		IndexedUnsortedList<Integer> list = emptyList_addToFrontA_A(); 
+		list.addToRear(ELEMENT_B);
+		return list;
+	}
+	private Scenario<Integer> A_addToRearB_AB = () -> A_addToRearB_AB();
+	
+	private IndexedUnsortedList<Integer> A_addB_AB() {
+		IndexedUnsortedList<Integer> list = emptyList_addToFrontA_A(); 
+		list.add(ELEMENT_B);
+		return list;
+	}
+	private Scenario<Integer> A_addB_AB = () -> A_addB_AB();
+	
+	private IndexedUnsortedList<Integer> A_add0B_BA() {
+		IndexedUnsortedList<Integer> list = emptyList_addToFrontA_A(); 
+		list.add(0, ELEMENT_B);
+		return list;
+	}
+	private Scenario<Integer> A_add0B_BA = () -> A_add0B_BA();
+	
+	private IndexedUnsortedList<Integer> A_add1B_AB() {
+		IndexedUnsortedList<Integer> list = emptyList_addToFrontA_A(); 
+		list.add(1, ELEMENT_B);
+		return list;
+	}
+	private Scenario<Integer> A_add1B_AB = () -> A_add1B_AB();
+	
+	private IndexedUnsortedList<Integer> A_addAfterA_AB() {
+		IndexedUnsortedList<Integer> list = emptyList_addToFrontA_A(); 
+		list.addAfter(ELEMENT_B, ELEMENT_A);
+		return list;
+	}
+	private Scenario<Integer> A_addAfterA_AB = () -> A_addAfterA_AB();
 	
 	private IndexedUnsortedList<Integer> A_set0B_B() {
 		IndexedUnsortedList<Integer> list = emptyList_addToFrontA_A();
