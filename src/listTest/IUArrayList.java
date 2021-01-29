@@ -1,5 +1,6 @@
 package listTest;
 
+import java.util.AbstractList;
 import java.util.Arrays;
 import java.util.ConcurrentModificationException;
 import java.util.Iterator;
@@ -65,7 +66,7 @@ public class IUArrayList<T> implements IndexedUnsortedList<T> {
 		if (index == NOT_FOUND) {
 			throw new NoSuchElementException();
 		}
-		add(index, element);
+		add(index+1, element);
 	}
 
 	@Override
@@ -223,40 +224,51 @@ public class IUArrayList<T> implements IndexedUnsortedList<T> {
 	private class ALIterator implements Iterator<T> {
 		private int nextIndex;
 		private int iterModCount;
+		private int lastRet = -1;
 		
 		public ALIterator() {
 			nextIndex = 0;
 			iterModCount = modCount;
 		}
-
-		@Override
-		public boolean hasNext() {
-			if(nextIndex < rear && iterModCount == modCount) {
-				return true;
-			}
-			else if (iterModCount != modCount) {
-				throw new ConcurrentModificationException();
-			}
-			return false;
-		}
-
-		@Override
-		public T next() {
-			if(hasNext()) {
-				T retVal = array[nextIndex];
-				nextIndex++;
-				return retVal;
-			}
-			throw new NoSuchElementException();
-		}
 		
-		@Override
-		public void remove() {
-			if(nextIndex > rear || rear == 0) throw new IllegalStateException();
-			if(hasNext()) {
-				IUArrayList.this.remove(nextIndex);
-				iterModCount++;
-			}
-		}
+		public boolean hasNext() {
+            return nextIndex != size();
+        }
+
+        public T next() {
+            checkForComodification();
+            try {
+                int i = nextIndex;
+                T next = get(i);
+                lastRet = i;
+                nextIndex = i + 1;
+                return next;
+            } catch (IndexOutOfBoundsException e) {
+                checkForComodification();
+                throw new NoSuchElementException(e);
+            }
+        }
+
+        public void remove() {
+            if (lastRet < 0)
+                throw new IllegalStateException();
+            checkForComodification();
+
+            try {
+            	IUArrayList.this.remove(lastRet);
+                if (lastRet < nextIndex)
+                    nextIndex--;
+                lastRet = -1;
+                iterModCount = modCount;
+            } catch (IndexOutOfBoundsException e) {
+                throw new ConcurrentModificationException();
+            }
+        }
+
+        final void checkForComodification() {
+            if (modCount != iterModCount)
+                throw new ConcurrentModificationException();
+        }
+        
 	}
 }
