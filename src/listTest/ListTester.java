@@ -22,7 +22,7 @@ public class ListTester {
 	};
 	// TODO: THIS IS WHERE YOU CHOOSE WHICH LIST TO TEST
 	private final static ListToUse LIST_TO_USE = ListToUse.arrayList;
-
+	
 	// possible results expected in tests
 	private enum Result {
 		IndexOutOfBounds, IllegalState, NoSuchElement, 
@@ -154,6 +154,8 @@ public class ListTester {
 		String STRING_BAC = "BAC";
 		Integer[] LIST_BDC = {ELEMENT_B, ELEMENT_D, ELEMENT_C};
 		String STRING_BDC = "BDC";
+		Integer[] LIST_CAB = {ELEMENT_C, ELEMENT_A, ELEMENT_B};
+		String STRING_CAB = "CAB";
 
 		//newly constructed empty list
 		testEmptyList(newList, "newList");
@@ -180,6 +182,7 @@ public class ListTester {
 		testSingleElementList(BA_removeB_A, "BA_removeB_A", LIST_A, STRING_A);
 		//2-element to 3-element
 		testThreeElementList(BA_addC_BAC, "BA_addC_BAC", LIST_BAC, STRING_BAC);
+		testThreeElementList(AB_addToFrontC_CAB, "AB_addToFrontC_CAB", LIST_CAB, STRING_CAB);
 		//2-element to changed 2-element via set()
 		testTwoElementList(BA_set0C_CA, "BA_set0A_AA", LIST_CA, STRING_CA);
 		//3-element to 2-element
@@ -379,6 +382,15 @@ public class ListTester {
 		return list;
 	}
 	private Scenario<Integer> BAC_set1D_BDC = () -> BAC_set1D_BDC();
+	
+	private IndexedUnsortedList<Integer> AB_addToFrontC_CAB() {
+		IndexedUnsortedList<Integer> list = A_add1B_AB();
+		list.addToFront(ELEMENT_C);
+		return list;
+	}
+	private Scenario<Integer> AB_addToFrontC_CAB = () -> AB_addToFrontC_CAB();
+	
+	
 
 	/////////////////////////////////
 	//XXX Tests for 0-element list

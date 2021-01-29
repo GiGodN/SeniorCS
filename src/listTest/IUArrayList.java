@@ -78,8 +78,9 @@ public class IUArrayList<T> implements IndexedUnsortedList<T> {
 		}
 		else if (index > rear) throw new IndexOutOfBoundsException();
 		else {
+			T[] clone = array.clone();
 			for (int i = index; i < rear; i++) {
-				array[i+1] = array[i];
+				array[i+1] = clone[i];
 			}
 			array[index] = element;
 		}
