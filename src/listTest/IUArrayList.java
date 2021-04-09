@@ -59,6 +59,13 @@ public class IUArrayList<T> implements IndexedUnsortedList<T> {
 	public void add(T element) {
 		add(rear, element);
 	}
+	
+	public void add(T ele1, T ... eleN) {
+		add(rear, ele1);
+		for(T ele : eleN) {
+			add(rear, ele);
+		}
+	}
 
 	@Override
 	public void addAfter(T element, T target) {
@@ -189,6 +196,32 @@ public class IUArrayList<T> implements IndexedUnsortedList<T> {
 	public int size() {
 		return rear;
 	}
+	
+	public static<T extends Comparable<T>> IUArrayList<T> sort(IUArrayList<T> list) {
+		IUArrayList<T> ret = new IUArrayList<T>();
+		for(T val : list) {
+			ret.add(val);
+		}
+		for(int i = 0; i < ret.size()-1; i++) {
+			for(int j = 0; j < ret.size()-i-1; j++) {
+				if(ret.get(j).compareTo(ret.get(j+1)) > 0) {
+					T temp = ret.get(j);
+					ret.set(j, ret.get(j+1));
+					ret.set(j+1, temp);
+				}
+			}
+		}
+		return ret;
+	}
+	
+	public static<T extends Comparable<T>> IUArrayList<T> revSort(IUArrayList<T> list) {
+		IUArrayList<T> temp = sort(list);
+		IUArrayList<T> ret = new IUArrayList<T>(temp.size());
+		for(int i = temp.size(); i > 0; i--) {
+			ret.add(temp.get(i-1));
+		}
+		return ret;
+	}
 
 	@Override
 	public Iterator<T> iterator() {
@@ -246,7 +279,7 @@ public class IUArrayList<T> implements IndexedUnsortedList<T> {
                 return next;
             } catch (IndexOutOfBoundsException e) {
                 checkForComodification();
-                throw new NoSuchElementException(e);
+                throw new NoSuchElementException();
             }
         }
 

@@ -954,7 +954,7 @@ public class ListTester {
 			result = Result.NoSuchElement;
 		} catch (Exception e) {
 			System.out.printf("%s caught unexpected %s\n", "testAddAfter", e.toString());
-			e.printStackTrace();
+			e.printStackTrace();https://github.com/GiGodN/SeniorCS
 			result = Result.UnexpectedException;
 		}
 		return result == expectedResult;
