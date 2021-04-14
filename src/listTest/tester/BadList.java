@@ -1,6 +1,8 @@
-package listTest;
+package listTest.tester;
 import java.util.Iterator;
 import java.util.ListIterator;
+
+import listTest.IndexedUnsortedList;
 
 /**
   * "Bad" implementation of the IndexedUnsortedList interface.

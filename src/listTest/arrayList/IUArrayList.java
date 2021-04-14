@@ -1,4 +1,4 @@
-package listTest;
+package listTest.arrayList;
 
 import java.util.AbstractList;
 import java.util.Arrays;
@@ -6,6 +6,8 @@ import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.ListIterator;
 import java.util.NoSuchElementException;
+
+import listTest.IndexedUnsortedList;
 
 /**
  * Array-based implementation of IndexedUnsortedList.
@@ -60,6 +62,7 @@ public class IUArrayList<T> implements IndexedUnsortedList<T> {
 		add(rear, element);
 	}
 	
+	@SuppressWarnings("unchecked")
 	public void add(T ele1, T ... eleN) {
 		add(rear, ele1);
 		for(T ele : eleN) {
