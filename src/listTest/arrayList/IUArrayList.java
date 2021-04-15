@@ -269,16 +269,16 @@ public class IUArrayList<T> implements IndexedUnsortedList<T> {
 		}
 		
 		public boolean hasNext() {
+			checkForComodification();
             return nextIndex != size();
         }
 
         public T next() {
             checkForComodification();
             try {
-                int i = nextIndex;
-                T next = get(i);
-                lastRet = i;
-                nextIndex = i + 1;
+                T next = get(nextIndex);
+                lastRet = nextIndex;
+                nextIndex = nextIndex + 1;
                 return next;
             } catch (IndexOutOfBoundsException e) {
                 checkForComodification();
@@ -287,16 +287,15 @@ public class IUArrayList<T> implements IndexedUnsortedList<T> {
         }
 
         public void remove() {
-            if (lastRet < 0)
+        	checkForComodification();
+        	if (lastRet < 0)
                 throw new IllegalStateException();
-            checkForComodification();
-
             try {
             	IUArrayList.this.remove(lastRet);
                 if (lastRet < nextIndex)
                     nextIndex--;
                 lastRet = -1;
-                iterModCount = modCount;
+                iterModCount++;
             } catch (IndexOutOfBoundsException e) {
                 throw new ConcurrentModificationException();
             }

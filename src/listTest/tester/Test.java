@@ -9,8 +9,8 @@ public class Test {
 		list.add("a");
 		list.add("b");
 		list.add("c");
-		list.set(0, "d");
-		System.out.println(list);
+//		list.last();
+		System.out.println(list.get(3));
 	}
 
 }

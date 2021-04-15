@@ -805,6 +805,7 @@ public class ListTester {
 		} catch (Exception e) {
 			System.out.printf("%s caught unexpected %s\n", "testLast", e.toString());
 			e.printStackTrace();
+			
 			result = Result.UnexpectedException;
 		}
 		return result == expectedResult;

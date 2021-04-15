@@ -71,7 +71,7 @@ public class IUSingleLinkedList<T> implements IndexedUnsortedList<T> {
 		}
 		Node<T> nextNode = node.getNext();
 		Node<T> newNode = new Node<T>(element);
-		if (nextNode == tail) {
+		if (node == tail) {
 			tail = newNode;
 		}
 		newNode.setNext(nextNode);
@@ -140,9 +140,9 @@ public class IUSingleLinkedList<T> implements IndexedUnsortedList<T> {
 
 	@Override
 	public void set(int index, T element) {
-		if(index > size || index < -1 || size == 0) throw new IndexOutOfBoundsException();
+		if(index > size-1 || index < 0 || size == 0) throw new IndexOutOfBoundsException();
 		Node<T> node = head;
-		for(int i = 0; i < index-1; i++) {
+		for(int i = 0; i < index; i++) {
 			node = node.getNext();
 		}
 		node.setElement(element);
@@ -150,8 +150,7 @@ public class IUSingleLinkedList<T> implements IndexedUnsortedList<T> {
 
 	@Override
 	public T get(int index) {
-		if(size < index || -1 < index) throw new IndexOutOfBoundsException();
-		if(isEmpty()) throw new IndexOutOfBoundsException();
+		if(size-1 < index || -1 >= index || isEmpty()) throw new IndexOutOfBoundsException();
 		Node<T> node = head;
 		for(int i = 0; i < index; i++) {
 			node = node.getNext();
@@ -185,7 +184,7 @@ public class IUSingleLinkedList<T> implements IndexedUnsortedList<T> {
 	@Override
 	public T last() {
 		if(isEmpty()) throw new NoSuchElementException();
-		return tail.getElement();
+		return get(size-1);
 	}
 
 	@Override
@@ -237,39 +236,51 @@ public class IUSingleLinkedList<T> implements IndexedUnsortedList<T> {
 	/** Iterator for IUSingleLinkedList */
 	private class SLLIterator implements Iterator<T> {
 		private Node<T> nextNode;
+		private Node<T> prvNode;
+		private boolean remove = true;
 		private int iterModCount;
 		
 		/** Creates a new iterator for the list */
 		public SLLIterator() {
 			nextNode = head;
+			prvNode = null;
 			iterModCount = modCount;
 		}
 
 		@Override
 		public boolean hasNext() {
 			checkForComodification();
-			try {
-				return nextNode.getNext() != null;
-			}
-			catch(NullPointerException e) {
-				return nextNode != null;
-			}
+			if(nextNode != null) return true;
+			return false;
 		}
 
 		@Override
 		public T next() {
 			checkForComodification();
-			if(!hasNext()) throw new NoSuchElementException();
-			T retVal = nextNode.getElement();
-			nextNode = nextNode.getNext();
-			return retVal;
+			try {
+				remove = false;
+				prvNode = nextNode;
+				T retVal = nextNode.getElement();
+				nextNode = nextNode.getNext();
+				return retVal;
+			}
+			catch(NullPointerException e) {
+				checkForComodification();
+				throw new NoSuchElementException();
+			}
 		}
 		
 		@Override
 		public void remove() {
 			checkForComodification();
-			if(nextNode == null) throw new IllegalStateException();
-			nextNode.setNext(nextNode.getNext().getNext());
+			if(remove) throw new IllegalStateException();
+			try {
+				IUSingleLinkedList.this.remove(prvNode.getElement());
+				iterModCount++;
+			}
+			catch(IndexOutOfBoundsException e) {
+				throw new ConcurrentModificationException();
+			}
 		}
 		
 		final void checkForComodification() {
