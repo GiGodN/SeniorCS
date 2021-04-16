@@ -1,6 +1,6 @@
 package listTest.tester;
 
-import listTest.linkedList.IUSingleLinkedList;
+import listTest.singleLinkedList.IUSingleLinkedList;
 
 public class Test {
 	

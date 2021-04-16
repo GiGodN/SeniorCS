@@ -1,4 +1,4 @@
-package listTest.linkedList;
+package listTest.singleLinkedList;
 
 /**
  * Node represents a node in a linked list.

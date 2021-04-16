@@ -1,4 +1,4 @@
-package listTest.linkedList;
+package listTest.singleLinkedList;
 
 
 import java.util.ConcurrentModificationException;
@@ -93,6 +93,7 @@ public class IUSingleLinkedList<T> implements IndexedUnsortedList<T> {
 		T ret = head.getElement();
 		head = head.getNext();
 		size--;
+		modCount++;
 		return ret;
 	}
 
@@ -145,6 +146,7 @@ public class IUSingleLinkedList<T> implements IndexedUnsortedList<T> {
 		for(int i = 0; i < index; i++) {
 			node = node.getNext();
 		}
+		modCount++;
 		node.setElement(element);
 	}
 
@@ -277,8 +279,9 @@ public class IUSingleLinkedList<T> implements IndexedUnsortedList<T> {
 			try {
 				IUSingleLinkedList.this.remove(prvNode.getElement());
 				iterModCount++;
+				remove = true;
 			}
-			catch(IndexOutOfBoundsException e) {
+			catch(NoSuchElementException e) {
 				throw new ConcurrentModificationException();
 			}
 		}
