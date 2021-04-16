@@ -1,5 +1,6 @@
 package listTest.doubleLinkedList;
 
+import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.ListIterator;
 import java.util.NoSuchElementException;
@@ -55,28 +56,28 @@ public class IUDoubleLinkedList<T> implements IndexedUnsortedList<T> {
 		for (int i = 0; i < index; i++) {
 			target = target.getNext();
 		}
-		ListNode<T> next = new ListNode<T>(element);
+		ListNode<T> newNode = new ListNode<T>(element);
 		if(target == null) {
-			tail.setNext(next);
-			next.setPrev(tail);
-			tail = next;
+			tail.setNext(newNode);
+			newNode.setPrev(tail);
+			tail = newNode;
 			modCount++;
 			size++;
 			return;
 		}
 		if(index == 0) {
-			head.setPrev(next);
-			next.setNext(head);
-			head = next;
+			head.setPrev(newNode);
+			newNode.setNext(head);
+			head = newNode;
 			modCount++;
 			size++;
 			return;
 		}
 		ListNode<T> prev = target.getPrev();
-		prev.setNext(next);
-		target.setPrev(next);
-		next.setNext(target);
-		next.setPrev(prev);
+		prev.setNext(newNode);
+		target.setPrev(newNode);
+		newNode.setNext(target);
+		newNode.setPrev(prev);
 		size++;
 		modCount++;
 	}
@@ -98,53 +99,63 @@ public class IUDoubleLinkedList<T> implements IndexedUnsortedList<T> {
 	@Override
 	public T remove(T element) {
 		int i = indexOf(element);
-		if(i < -1)
+		if(i == -1)
 			throw new NoSuchElementException();
 		return remove(i);
 	}
 
 	@Override
 	public T remove(int index) {
-		if(!(-1 < index && index < size)) {
+		if(0 > index || index >= size) {
 			throw new IndexOutOfBoundsException();
 		}
 		if(isEmpty()) {
 			throw new NoSuchElementException();
 		}
-		ListNode<T> cur = head;
+		ListNode<T> curr = head;
 		for (int i = 0; i < index; i++) {
-			cur = cur.getNext();
+			curr = curr.getNext();
 		}
 		if(size == 1) {
 			head = tail = null;
 		}
 		else if(index == 0) {
-			head = cur.getNext();
+			head = curr.getNext();
 			head.setPrev(null);
 		}
-		else if(cur == tail) {
-			tail = cur.getPrev();
+		else if(curr == tail) {
+			tail = curr.getPrev();
 			tail.setNext(null);
 		}
 		else {
-			cur.getPrev().setNext(cur.getNext());
-			cur.getNext().setPrev(cur.getPrev());
+			curr.getPrev().setNext(curr.getNext());
+			curr.getNext().setPrev(curr.getPrev());
 		}
 		size--;
 		modCount++;
-		return cur.getElem();
+		return curr.getElem();
 	}
 
 	@Override
 	public void set(int index, T element) {
-		// TODO Auto-generated method stub
-
+		if(index > size-1 || index < 0 || size == 0)
+			throw new IndexOutOfBoundsException();
+		ListNode<T> target = head;
+		for(int i = 0; i < index-1; i++) {
+			target = target.getNext();
+		}
+		target.setElem(element);
 	}
 
 	@Override
 	public T get(int index) {
-		// TODO Auto-generated method stub
-		return null;
+		if(size-1 < index || -1 >= index || isEmpty())
+			throw new IndexOutOfBoundsException();
+		ListNode<T> target = head;
+		for(int i = 0; i < index-1; i++) {
+			target = target.getNext();
+		}
+		return target.getElem();
 	}
 
 	@Override
@@ -181,8 +192,7 @@ public class IUDoubleLinkedList<T> implements IndexedUnsortedList<T> {
 
 	@Override
 	public boolean contains(T target) {
-		// TODO Auto-generated method stub
-		return false;
+		return indexOf(target) != -1;
 	}
 
 	@Override
@@ -226,55 +236,74 @@ public class IUDoubleLinkedList<T> implements IndexedUnsortedList<T> {
 	}
 
 	private class DLLListIterator implements ListIterator<T> {
+		
+		private int index, iterModCount;
+		private ListNode<T> lastRet, curr;
 
 		public DLLListIterator() {
-
+			index = 0;
+			lastRet = null;
+			curr = head;
+			iterModCount = modCount;
 		}
 
 		public DLLListIterator(int startingIndex) {
-
+			index = startingIndex;
+			lastRet = null;
+			curr = head;
+			for(int i = 0; i < startingIndex-1; i++) {
+				curr = curr.getNext();
+			}
 		}
 
 		@Override
 		public void add(T arg0) {
-			// TODO Auto-generated method stub
-
+			
 		}
 
 		@Override
 		public boolean hasNext() {
-			// TODO Auto-generated method stub
-			return false;
+			checkForComodification();
+			return curr != tail;
 		}
 
 		@Override
 		public boolean hasPrevious() {
-			// TODO Auto-generated method stub
-			return false;
+			checkForComodification();
+			return curr != head;
 		}
 
 		@Override
 		public T next() {
-			// TODO Auto-generated method stub
-			return null;
+			checkForComodification();
+			try {
+				index++;
+				curr = curr.getNext();
+				return curr.getPrev().getElem();
+			}
+			catch(NullPointerException e) {
+				throw new NoSuchElementException();
+			}
 		}
 
 		@Override
 		public int nextIndex() {
-			// TODO Auto-generated method stub
-			return 0;
+			checkForComodification();
+			return index+1;
 		}
 
 		@Override
 		public T previous() {
-			// TODO Auto-generated method stub
-			return null;
+			checkForComodification();
+			index--;
+			curr = curr.getPrev();
+			return curr.getElem();
 		}
 
 		@Override
 		public int previousIndex() {
-			// TODO Auto-generated method stub
-			return 0;
+			checkForComodification();
+			return index-1;
 		}
 
 		@Override
@@ -284,9 +313,14 @@ public class IUDoubleLinkedList<T> implements IndexedUnsortedList<T> {
 		}
 
 		@Override
-		public void set(T arg0) {
+		public void set(T element) {
 			// TODO Auto-generated method stub
 
+		}
+		
+		final void checkForComodification() {
+			if(modCount != iterModCount)
+				throw new ConcurrentModificationException();
 		}
 
 	}
