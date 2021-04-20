@@ -438,7 +438,13 @@ public class ListTester {
 			printTest(scenarioName + "_testIterRemove", testIterRemove(scenario.build().iterator(), Result.IllegalState));
 			// ListIterator
 			if (SUPPORTS_LIST_ITERATOR) {
-				//TODO: will add for double-linked list
+				printTest(scenarioName + "_testListIter", testListIter(scenario.build(), Result.NoException));
+				printTest(scenarioName + "_testListIter1", testListIter(scenario.build(), 1, Result.IndexOutOfBounds));
+				printTest(scenarioName + "_testListIterNextIndex", testListIterNextIndex(scenario.build().listIterator(), 1, Result.MatchingValue));
+				printTest(scenarioName + "_testListIterHasPrevious", testListIterHasPrevious(scenario.build().listIterator(), Result.False));
+				printTest(scenarioName + "_testListIterPreviousIndex", testListIterPreviousIndex(scenario.build().listIterator(), -1, Result.MatchingValue));
+				printTest(scenarioName + "_testListIterAddX", testListIterAdd(scenario.build().listIterator(), ELEMENT_X, Result.NoException));
+				printTest(scenarioName + "_testListIterSetX", testListIterSet(scenario.build().listIterator(), ELEMENT_X, Result.IllegalState));
 			} else {
 				printTest(scenarioName + "_testListIter", testListIter(scenario.build(), Result.UnsupportedOperation));
 				printTest(scenarioName + "_testListIter0", testListIter(scenario.build(), 0, Result.UnsupportedOperation));
@@ -511,7 +517,13 @@ public class ListTester {
 			printTest(scenarioName + "_iterNextRemove_testIterRemove", testIterRemove(iterAfterRemove(iterAfterNext(scenario.build(), 1)), Result.IllegalState));
 			// ListIterator
 			if (SUPPORTS_LIST_ITERATOR) {
-				//TODO: will add for double-linked list
+				printTest(scenarioName + "_testListIter", testListIter(scenario.build(), Result.NoException));
+				printTest(scenarioName + "_testListIter1", testListIter(scenario.build(), 1, Result.IndexOutOfBounds));
+				printTest(scenarioName + "_testListIterNextIndex", testListIterNextIndex(scenario.build().listIterator(), 1, Result.MatchingValue));
+				printTest(scenarioName + "_testListIterHasPrevious", testListIterHasPrevious(scenario.build().listIterator(), Result.False));
+				printTest(scenarioName + "_testListIterPreviousIndex", testListIterPreviousIndex(scenario.build().listIterator(), -1, Result.MatchingValue));
+				printTest(scenarioName + "_testListIterAddX", testListIterAdd(scenario.build().listIterator(), ELEMENT_X, Result.NoException));
+				printTest(scenarioName + "_testListIterSetX", testListIterSet(scenario.build().listIterator(), ELEMENT_X, Result.IllegalState));
 			} else {
 				printTest(scenarioName + "_testListIter", testListIter(scenario.build(), Result.UnsupportedOperation));
 				printTest(scenarioName + "_testListIter0", testListIter(scenario.build(), 0, Result.UnsupportedOperation));
@@ -587,7 +599,25 @@ public class ListTester {
 			printTest(scenarioName + "_iterNextRemove_testIterRemove", testIterRemove(iterAfterRemove(iterAfterNext(scenario.build(), 1)), Result.IllegalState));
 			// ListIterator
 			if (SUPPORTS_LIST_ITERATOR) {
-				//TODO: will add for double-linked list
+				printTest(scenarioName + "_testListIter", testListIter(scenario.build(), Result.NoException));
+				printTest(scenarioName + "_testListIter1", testListIter(scenario.build(), 1, Result.NoException));
+				printTest(scenarioName + "_testListIter2", testListIter(scenario.build(), 2, Result.IndexOutOfBounds));
+				printTest(scenarioName + "_testListIterNextIndex", testListIterNextIndex(scenario.build().listIterator(), 1, Result.MatchingValue));
+				printTest(scenarioName + "_testListIter1NextIndex", testListIterNextIndex(scenario.build().listIterator(1), 2, Result.MatchingValue));
+				printTest(scenarioName + "_testListIterHasPrevious", testListIterHasPrevious(scenario.build().listIterator(), Result.False));
+				printTest(scenarioName + "_testListIter1HasPrevious", testListIterHasPrevious(scenario.build().listIterator(1), Result.True));
+				printTest(scenarioName + "_testListIterPreviousIndex", testListIterPreviousIndex(scenario.build().listIterator(), -1, Result.MatchingValue));
+				printTest(scenarioName + "_testListIter1PreviousIndex", testListIterPreviousIndex(scenario.build().listIterator(1), 0, Result.MatchingValue));
+				printTest(scenarioName + "_testListIterAddX", testListIterAdd(scenario.build().listIterator(), ELEMENT_X, Result.IllegalState));
+				printTest(scenarioName + "_testListIterSetX", testListIterSet(scenario.build().listIterator(), ELEMENT_X, Result.NoException));
+				printTest(scenarioName + "_listIter1Previous_testIterHasNext", testIterHasNext(listIterAfterPrevious(scenario.build().listIterator(1), 1), Result.True));
+				printTest(scenarioName + "_listIter1Previous_testListIterHasPrevious", testListIterHasPrevious(listIterAfterPrevious(scenario.build().listIterator(1), 1), Result.False));
+				printTest(scenarioName + "_listIter1Previous_testIterNext", testIterNext(listIterAfterPrevious(scenario.build().listIterator(1), 1), contents[1], Result.MatchingValue));
+				printTest(scenarioName + "_listIter1Previous_testListIterPrevious", testListIterPrevious(listIterAfterPrevious(scenario.build().listIterator(1), 1), null, Result.NoSuchElement));
+				printTest(scenarioName + "_listIter1Previous_testListIterNextIndex", testListIterNextIndex(listIterAfterPrevious(scenario.build().listIterator(1), 1), 1, Result.MatchingValue));
+				printTest(scenarioName + "_listIter1Previous_testListIterPreviousIndex", testListIterPreviousIndex(listIterAfterPrevious(scenario.build().listIterator(1), 1), -1, Result.MatchingValue));
+				printTest(scenarioName + "_listIter1Previous_testListIterAddX", testListIterAdd(listIterAfterPrevious(scenario.build().listIterator(1), 1), ELEMENT_X, Result.NoException));
+				printTest(scenarioName + "_listIter1Previous_testListIterSetX", testListIterSet(listIterAfterPrevious(scenario.build().listIterator(1), 1), ELEMENT_X, Result.NoException));
 			} else {
 				printTest(scenarioName + "_testListIter", testListIter(scenario.build(), Result.UnsupportedOperation));
 				printTest(scenarioName + "_testListIter0", testListIter(scenario.build(), 0, Result.UnsupportedOperation));	
@@ -666,7 +696,25 @@ public class ListTester {
 			printTest(scenarioName + "_iterNextRemove_testIterRemove", testIterRemove(iterAfterRemove(iterAfterNext(scenario.build(), 1)), Result.IllegalState));
 			// ListIterator
 			if (SUPPORTS_LIST_ITERATOR) {
-				//TODO: will add for double-linked list
+				printTest(scenarioName + "_testListIter", testListIter(scenario.build(), Result.NoException));
+				printTest(scenarioName + "_testListIter1", testListIter(scenario.build(), 1, Result.NoException));
+				printTest(scenarioName + "_testListIter2", testListIter(scenario.build(), 2, Result.IndexOutOfBounds));
+				printTest(scenarioName + "_testListIterNextIndex", testListIterNextIndex(scenario.build().listIterator(), 1, Result.MatchingValue));
+				printTest(scenarioName + "_testListIter1NextIndex", testListIterNextIndex(scenario.build().listIterator(1), 2, Result.MatchingValue));
+				printTest(scenarioName + "_testListIterHasPrevious", testListIterHasPrevious(scenario.build().listIterator(), Result.False));
+				printTest(scenarioName + "_testListIter1HasPrevious", testListIterHasPrevious(scenario.build().listIterator(1), Result.True));
+				printTest(scenarioName + "_testListIterPreviousIndex", testListIterPreviousIndex(scenario.build().listIterator(), -1, Result.MatchingValue));
+				printTest(scenarioName + "_testListIter1PreviousIndex", testListIterPreviousIndex(scenario.build().listIterator(1), 0, Result.MatchingValue));
+				printTest(scenarioName + "_testListIterAddX", testListIterAdd(scenario.build().listIterator(), ELEMENT_X, Result.IllegalState));
+				printTest(scenarioName + "_testListIterSetX", testListIterSet(scenario.build().listIterator(), ELEMENT_X, Result.NoException));
+				printTest(scenarioName + "_listIter1Previous_testIterHasNext", testIterHasNext(listIterAfterPrevious(scenario.build().listIterator(1), 1), Result.True));
+				printTest(scenarioName + "_listIter1Previous_testListIterHasPrevious", testListIterHasPrevious(listIterAfterPrevious(scenario.build().listIterator(1), 1), Result.False));
+				printTest(scenarioName + "_listIter1Previous_testIterNext", testIterNext(listIterAfterPrevious(scenario.build().listIterator(1), 1), contents[1], Result.MatchingValue));
+				printTest(scenarioName + "_listIter1Previous_testListIterPrevious", testListIterPrevious(listIterAfterPrevious(scenario.build().listIterator(1), 1), null, Result.NoSuchElement));
+				printTest(scenarioName + "_listIter1Previous_testListIterNextIndex", testListIterNextIndex(listIterAfterPrevious(scenario.build().listIterator(1), 1), 1, Result.MatchingValue));
+				printTest(scenarioName + "_listIter1Previous_testListIterPreviousIndex", testListIterPreviousIndex(listIterAfterPrevious(scenario.build().listIterator(1), 1), -1, Result.MatchingValue));
+				printTest(scenarioName + "_listIter1Previous_testListIterAddX", testListIterAdd(listIterAfterPrevious(scenario.build().listIterator(1), 1), ELEMENT_X, Result.NoException));
+				printTest(scenarioName + "_listIter1Previous_testListIterSetX", testListIterSet(listIterAfterPrevious(scenario.build().listIterator(1), 1), ELEMENT_X, Result.NoException));
 			} else {
 				printTest(scenarioName + "_testListIter", testListIter(scenario.build(), Result.UnsupportedOperation));
 				printTest(scenarioName + "_testListIter0", testListIter(scenario.build(), 0, Result.UnsupportedOperation));	
@@ -1594,7 +1642,7 @@ public class ListTester {
 			it2 = list.iterator();
 			it1.next();
 			it1.remove();
-			printTest("A_iter1NextRemove_testIter2Remove", testIterRemove(it2, Result.ConcurrentModification));
+			printTest("A_iterPrev1NextRemove_testIter2Remove", testIterRemove(it2, Result.ConcurrentModification));
 
 			list = emptyList_addToFrontA_A();
 			it1 = list.iterator();

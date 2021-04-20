@@ -232,6 +232,7 @@ public class IUDoubleLinkedList<T> implements IndexedUnsortedList<T> {
 
 	@Override
 	public ListIterator<T> listIterator(int startingIndex) {
+		if(startingIndex >= size) throw new IndexOutOfBoundsException();
 		return new DLLListIterator(startingIndex);
 	}
 
@@ -239,26 +240,46 @@ public class IUDoubleLinkedList<T> implements IndexedUnsortedList<T> {
 		
 		private int index, iterModCount;
 		private ListNode<T> lastRet, curr;
+		private String lastOp;
 
 		public DLLListIterator() {
 			index = 0;
 			lastRet = null;
 			curr = head;
 			iterModCount = modCount;
+			lastOp = null;
 		}
 
 		public DLLListIterator(int startingIndex) {
 			index = startingIndex;
 			lastRet = null;
 			curr = head;
+			lastOp = null;
 			for(int i = 0; i < startingIndex-1; i++) {
 				curr = curr.getNext();
 			}
 		}
 
 		@Override
-		public void add(T arg0) {
-			
+		public void add(T elem) {
+			checkForComodification();
+			lastOp = null;
+			lastRet = null;
+			index++;
+			if(curr != null) {
+				ListNode<T> last = curr.getPrev();
+				ListNode<T> newNode = new ListNode<T>(elem);
+				curr.setPrev(newNode);
+				if(last != null) last.setNext(newNode);
+				newNode.setPrev(last);
+				newNode.setNext(curr);
+			}
+			else {
+				curr = new ListNode<T>(elem);
+			}
+			size++;
+			modCount++;
+			iterModCount++;
 		}
 
 		@Override
@@ -277,7 +298,9 @@ public class IUDoubleLinkedList<T> implements IndexedUnsortedList<T> {
 		public T next() {
 			checkForComodification();
 			try {
+				lastOp = "next";
 				index++;
+				lastRet = curr;
 				curr = curr.getNext();
 				return curr.getPrev().getElem();
 			}
@@ -295,9 +318,16 @@ public class IUDoubleLinkedList<T> implements IndexedUnsortedList<T> {
 		@Override
 		public T previous() {
 			checkForComodification();
-			index--;
-			curr = curr.getPrev();
-			return curr.getElem();
+			try {
+				lastOp = "prev";
+				index--;
+				lastRet = curr;
+				curr = curr.getPrev();
+				return curr.getNext().getElem();
+			}
+			catch(NullPointerException e) {
+				throw new NoSuchElementException();
+			}
 		}
 
 		@Override
@@ -308,13 +338,13 @@ public class IUDoubleLinkedList<T> implements IndexedUnsortedList<T> {
 
 		@Override
 		public void remove() {
-			// TODO Auto-generated method stub
-
+			if(lastRet == null || lastOp == null) throw new IllegalStateException();
+			IUDoubleLinkedList.this.remove(lastRet.getElem());
 		}
 
 		@Override
 		public void set(T element) {
-			// TODO Auto-generated method stub
+			if(lastRet == null || lastOp == null) throw new IllegalStateException();
 
 		}
 		
