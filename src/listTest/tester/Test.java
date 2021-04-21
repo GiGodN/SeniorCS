@@ -1,5 +1,7 @@
 package listTest.tester;
 
+import java.util.ListIterator;
+
 import listTest.doubleLinkedList.IUDoubleLinkedList;
 
 public class Test {
@@ -8,9 +10,10 @@ public class Test {
 		IUDoubleLinkedList<Integer> list = new IUDoubleLinkedList<Integer>();
 		list.add(1);
 		list.add(2);
-		list.add(3);
-		list.remove(1);
-		System.out.println(list.last());
+		ListIterator<Integer> lI = list.listIterator(1);
+		System.out.println(list);
+		System.out.println(lI.previous());
+		System.out.println(lI.next());
 	}
 
 }
