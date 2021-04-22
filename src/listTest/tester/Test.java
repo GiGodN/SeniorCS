@@ -8,12 +8,10 @@ public class Test {
 	
 	public static void main(String[] args) {
 		IUDoubleLinkedList<Integer> list = new IUDoubleLinkedList<Integer>();
-		list.add(1);
-		list.add(2);
-		ListIterator<Integer> lI = list.listIterator(1);
+		ListIterator<Integer> lI = list.listIterator();
 		System.out.println(list);
+		lI.hasPrevious();
 		System.out.println(lI.previous());
-		System.out.println(lI.next());
 	}
 
 }

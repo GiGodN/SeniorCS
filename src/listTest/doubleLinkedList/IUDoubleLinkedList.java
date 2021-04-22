@@ -335,6 +335,9 @@ public class IUDoubleLinkedList<T> implements IndexedUnsortedList<T> {
 		private int index, lastIndex, iterModCount;
 		private ListNode<T> lastRet, curr;
 
+		/**
+		 * Constructor with a starting index of zero
+		 */
 		public DLLListIterator() {
 			index = 0;
 			lastIndex = 0;
@@ -342,6 +345,12 @@ public class IUDoubleLinkedList<T> implements IndexedUnsortedList<T> {
 			curr = head;
 			iterModCount = modCount;
 		}
+		
+		/**
+		 * Constructor with starts the iterator at target index
+		 * 
+		 * @param startingIndex index to start at
+		 */
 
 		public DLLListIterator(int startingIndex) {
 			try {
@@ -360,6 +369,9 @@ public class IUDoubleLinkedList<T> implements IndexedUnsortedList<T> {
 			}
 		}
 
+		/**
+		 * 
+		 */
 		@Override
 		public void add(T elem) {
 			checkForComodification();
