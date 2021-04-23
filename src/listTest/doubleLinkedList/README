@@ -1,0 +1,52 @@
+OVERVIEW:
+	
+	This is a self created Index Unsorted List that 
+	uses double linked nodes to store the data.
+	
+Included Files:
+	
+	* IUDoubleLinkedList.java - source file
+	* ListNode.java - source file
+	* ListTester.java - test file
+	* IndexedUnsortedList.java - interface
+	* README - this file
+	
+COMPILING AND RUNNING:
+
+	From the directory containing all source files, compile the
+	driver class (and all dependencies) with the command:
+	$ javac ListTester.java
+
+	Run the compiled class file with the command:
+	$ java ListTester
+
+	Console output will give the results after the program finishes.
+	
+PROGRAM DESIGN AND IMPORTANT CONCEPTS:
+	
+	We learned how ListIterators worked and how they
+	differ in implementation from a Iterator.
+	
+	The remove element method was given to us,
+	which is not as useful as a remove index function
+	so I adapted the algorithm from the remove element
+	function and created the remove index function
+	The add function is almost verbatim from my single
+	linked list with added lines to update the previous 
+	reference in the nodes.
+	
+TESTING:
+
+	I used the pre-curated test to test most of the functionality,
+	then wrote test to test the added functionality.
+	
+DISCUSSION:
+	
+	I encountered problems with the add methods because of the previous
+	node pointer that is included in a double linked list. Improperly
+	updating this pointer in my add methods created some problems
+	later down the link. Almost all of my time spent on this project was
+	spent creating tests, as the list part was just adapting the single
+	linked list homework to this project.
+	
+	

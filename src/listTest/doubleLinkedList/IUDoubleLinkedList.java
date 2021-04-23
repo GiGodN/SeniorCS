@@ -370,7 +370,11 @@ public class IUDoubleLinkedList<T> implements IndexedUnsortedList<T> {
 		}
 
 		/**
+		 * Adds an element to the list behind the current index.
+		 * Will not affect the net call to next
 		 * 
+		 * 
+		 * @param element to be added
 		 */
 		@Override
 		public void add(T elem) {
@@ -394,18 +398,27 @@ public class IUDoubleLinkedList<T> implements IndexedUnsortedList<T> {
 			iterModCount++;
 		}
 
+		/**
+		 * Returns true if the list has another element available for a call to next
+		 */
 		@Override
 		public boolean hasNext() {
 			checkForComodification();
 			return index != size;
 		}
 
+		/**
+		 * Returns true if the list has another element available for a call to previous
+		 */
 		@Override
 		public boolean hasPrevious() {
 			checkForComodification();
 			return index != 0;
 		}
 
+		/**
+		 * Returns the next element in the list and increments the index
+		 */
 		@Override
 		public T next() {
 			checkForComodification();
@@ -421,12 +434,18 @@ public class IUDoubleLinkedList<T> implements IndexedUnsortedList<T> {
 			}
 		}
 
+		/**
+		 * Returns the index of the next element to be returned by the iterator
+		 */
 		@Override
 		public int nextIndex() {
 			checkForComodification();
 			return index+1;
 		}
 
+		/**
+		 * Returns the previous element in the list and decrements the index
+		 */
 		@Override
 		public T previous() {
 			checkForComodification();
@@ -442,12 +461,18 @@ public class IUDoubleLinkedList<T> implements IndexedUnsortedList<T> {
 			}
 		}
 
+		/**
+		 * Returns the index of the previous element to be returned by the iterator
+		 */
 		@Override
 		public int previousIndex() {
 			checkForComodification();
 			return index-1;
 		}
 
+		/**
+		 * Removes the element last returned by the iterator
+		 */
 		@Override
 		public void remove() {
 			checkForComodification();
@@ -458,6 +483,9 @@ public class IUDoubleLinkedList<T> implements IndexedUnsortedList<T> {
 			iterModCount++;
 		}
 
+		/**
+		 * Sets the value of the node last returned by the iterator
+		 */
 		@Override
 		public void set(T element) {
 			checkForComodification();
@@ -467,7 +495,7 @@ public class IUDoubleLinkedList<T> implements IndexedUnsortedList<T> {
 			iterModCount++;
 		}
 		
-		final void checkForComodification() {
+		private final void checkForComodification() {
 			if(modCount != iterModCount)
 				throw new ConcurrentModificationException();
 		}
