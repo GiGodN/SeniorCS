@@ -89,10 +89,10 @@ public class Sort {
 		IndexedUnsortedList<T> leftList = new IUDoubleLinkedList<T>();
 		IndexedUnsortedList<T> rightList = new IUDoubleLinkedList<T>();
 		
-		for(int i = 0; i < leftSize; i++) {
+		for(int i = 0; i < leftSize; ++i) {
 			leftList.add(i, list.get(left + i));
 		}
-		for(int i = 0; i < rightSize; i++) {
+		for(int i = 0; i < rightSize; ++i) {
 			rightList.add(i, list.get(middle + 1 + i));
 		}
 		
@@ -106,6 +106,17 @@ public class Sort {
 				list.set(i, rightList.get(r));
 				r++;
 			}
+			i++;
+		}
+		
+		while(l < leftSize) {
+			list.set(i, leftList.get(l));
+			l++;
+			i++;
+		}
+		while(r < rightSize) {
+			list.set(i, leftList.get(r));
+			r++;
 			i++;
 		}
 	}
