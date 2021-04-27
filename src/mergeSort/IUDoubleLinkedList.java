@@ -208,7 +208,7 @@ public class IUDoubleLinkedList<T> implements IndexedUnsortedList<T> {
 		if(size-1 < index || -1 >= index || isEmpty())
 			throw new IndexOutOfBoundsException();
 		ListNode<T> target = head;
-		for(int i = 0; i < index-1; i++) {
+		for(int i = 0; i < index; i++) {
 			target = target.getNext();
 		}
 		return target.getElem();
