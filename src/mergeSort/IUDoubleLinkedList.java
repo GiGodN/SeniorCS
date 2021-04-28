@@ -32,7 +32,19 @@ public class IUDoubleLinkedList<T> implements IndexedUnsortedList<T> {
 	 */
 	@Override
 	public void addToRear(T element) {
-		add(size, element);
+		if(size == 0) {
+			head = new ListNode<T>(element);
+			tail = head;
+			size++;
+			modCount++;
+			return;
+		}
+		ListNode<T> newNode = new ListNode<T>(element);
+		tail.setNext(newNode);
+		newNode.setPrev(tail);
+		tail = newNode;
+		modCount++;
+		size++;
 	}
 
 	/**
@@ -42,7 +54,7 @@ public class IUDoubleLinkedList<T> implements IndexedUnsortedList<T> {
 	 */
 	@Override
 	public void add(T element) {
-		add(size, element);
+		addToRear(element);
 	}
 
 	/**
@@ -450,6 +462,11 @@ public class IUDoubleLinkedList<T> implements IndexedUnsortedList<T> {
 			try {
 				lastIndex = index;
 				index--;
+				if(curr == null) {
+					curr = tail;
+					lastRet = curr;
+					return curr.getElem();
+				}
 				lastRet = curr;
 				curr = curr.getPrev();
 				return curr.getElem();
@@ -488,8 +505,9 @@ public class IUDoubleLinkedList<T> implements IndexedUnsortedList<T> {
 		public void set(T element) {
 			checkForComodification();
 			if(lastRet == null) throw new IllegalStateException();
-			IUDoubleLinkedList.this.set(lastIndex, element);
+			lastRet.setElem(element);
 			lastRet = null;
+			modCount++;
 			iterModCount++;
 		}
 		

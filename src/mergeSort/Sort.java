@@ -2,6 +2,7 @@ package mergeSort;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.ListIterator;
 
 /**
  * Class for sorting lists that implement the IndexedUnsortedList interface,
@@ -57,16 +58,48 @@ public class Sort {
 	 * @param list The list to be sorted, implements IndexedUnsortedList interface
 	 */
 	private static <T extends Comparable<T>> void mergesort(IndexedUnsortedList<T> list) {
-		if(list.size() <= 1) return;
+		if(list.size() >= 1) {
+			if(list.size() <= 1) return;
+			IndexedUnsortedList<T> ret = newList();
+			IndexedUnsortedList<T> left = newList();
+			IndexedUnsortedList<T> right = newList();
+			ListIterator<T> iter = list.listIterator();
+			int i = 0;
+			while(iter.hasNext()) {
+				T val = iter.next();
+				if(i < list.size()/2) left.add(val);
+				else right.add(val);
+				i++;
+			}
+			left = split(left);
+			right = split(right);
+			ret = merge(left, right);
+			iter = list.listIterator();
+			iter.next();
+			for(T val : ret) {
+				iter.set(val);
+				if(iter.hasNext()) iter.next();
+			}
+		}
+	}
+	
+	private static <T extends Comparable<T>> IndexedUnsortedList<T> split(IndexedUnsortedList<T> list) {
+		if(list.size() <= 1) return list;
+		IndexedUnsortedList<T> ret = newList();
 		IndexedUnsortedList<T> left = newList();
 		IndexedUnsortedList<T> right = newList();
-		for(int i = 0; i < list.size(); i++) {
-			if(i < list.size()/2) left.add(list.get(i));
-			else right.add(list.get(i));
+		ListIterator<T> iter = list.listIterator();
+		int i = 0;
+		while(iter.hasNext()) {
+			T val = iter.next();
+			if(i < list.size()/2) left.add(val);
+			else right.add(val);
+			i++;
 		}
-		mergesort(left);
-		mergesort(right);
-		list = merge(left, right);
+		left = split(left);
+		right = split(right);
+		ret = merge(left, right);
+		return ret;
 	}
 
 	/**
@@ -79,62 +112,94 @@ public class Sort {
 	 * @param c    The Comparator used
 	 */
 	private static <T> void mergesort(IndexedUnsortedList<T> list, Comparator<T> c) {
-		if(list.size() <= 1) return;
+		if(list.size() >= 1) {
+			if(list.size() <= 1) return;
+			IndexedUnsortedList<T> ret = newList();
+			IndexedUnsortedList<T> left = newList();
+			IndexedUnsortedList<T> right = newList();
+			ListIterator<T> iter = list.listIterator();
+			int i = 0;
+			while(iter.hasNext()) {
+				T val = iter.next();
+				if(i < list.size()/2) left.add(val);
+				else right.add(val);
+				i++;
+			}
+			left = split(left, c);
+			right = split(right, c);
+			ret = merge(left, right, c);
+			iter = list.listIterator();
+			iter.next();
+			for(T val : ret) {
+				iter.set(val);
+				if(iter.hasNext()) iter.next();
+			}
+		}
+	}
+	
+	private static <T> IndexedUnsortedList<T> split(IndexedUnsortedList<T> list, Comparator<T> c) {
+		if(list.size() <= 1) return list;
+		IndexedUnsortedList<T> ret = newList();
 		IndexedUnsortedList<T> left = newList();
 		IndexedUnsortedList<T> right = newList();
-		for(int i = 0; i < list.size(); i++) {
-			if(i < list.size()/2) left.add(list.get(i));
-			else right.add(list.get(i));
+		ListIterator<T> iter = list.listIterator();
+		int i = 0;
+		while(iter.hasNext()) {
+			T val = iter.next();
+			if(i < list.size()/2) left.add(val);
+			else right.add(val);
+			i++;
 		}
-		mergesort(left, c);
-		mergesort(right, c);
-		list = merge(left, right, c);
+		left = split(left, c);
+		right = split(right, c);
+		ret = merge(left, right, c);
+		return ret;
 	}
 	
 	private static <T extends Comparable<T>> IndexedUnsortedList<T> merge(IndexedUnsortedList<T> left, IndexedUnsortedList<T> right) {
 		IndexedUnsortedList<T> ret = newList();
-		int l = 0, r = 0;
-		while(l < left.size() && r < right.size()) {
-			if(left.get(l).compareTo(right.get(r)) <= 0) {
-				ret.add(left.get(l));
-				l++;
+		ListIterator<T> lIter = left.listIterator(), rIter = right.listIterator();
+		T l = null, r = null;
+		while(lIter.hasNext() && rIter.hasNext()) {
+			l = lIter.next(); r = rIter.next();
+			if(l.compareTo(r) <= 0) {
+				ret.addToRear(l);
+				rIter.previous();
 			}
 			else {
-				ret.add(right.get(r));
-				r++;
+				ret.addToRear(r);
+				lIter.previous();
 			}
 		}
-		while(l < left.size()) {
-			ret.add(left.get(l));
-			l++;
+		while(lIter.hasNext()) {
+			ret.addToRear(lIter.next());
 		}
-		while(r < right.size()) {
-			ret.add(right.get(r));
-			r++;
+		while(rIter.hasNext()) {
+			ret.addToRear(rIter.next());
 		}
 		return ret;
 	}
 	
 	private static <T> IndexedUnsortedList<T> merge(IndexedUnsortedList<T> left, IndexedUnsortedList<T> right, Comparator<T> comp) {
 		IndexedUnsortedList<T> ret = newList();
-		int l = 0, r = 0;
-		while(l < left.size() && r < right.size()) {
-			if(comp.compare(left.get(l), right.get(r)) <= 0) {
-				ret.add(left.get(l));
-				l++;
+		ListIterator<T> lIter = left.listIterator(), rIter = right.listIterator();
+		T l = null, r = null;
+		while(lIter.hasNext() && rIter.hasNext()) {
+			l = lIter.next(); r = rIter.next();
+			if(comp.compare(l, r) <= 0) {
+				ret.addToRear(l);
+				rIter.previous();
 			}
 			else {
-				ret.add(right.get(r));
-				r++;
+				ret.addToRear(r);
+				lIter.previous();
 			}
 		}
-		while(l < left.size()) {
-			ret.add(left.get(l));
-			l++;
+		while(lIter.hasNext()) {
+			ret.addToRear(lIter.next());
 		}
-		while(r < right.size()) {
-			ret.add(right.get(r));
-			r++;
+		while(rIter.hasNext()) {
+			ret.addToRear(rIter.next());
 		}
 		return ret;
 	}
