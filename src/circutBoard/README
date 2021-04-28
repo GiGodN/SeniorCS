@@ -1,0 +1,12 @@
+ANALYSIS:
+	
+	I believe that using a queue would result in a better search algorithm because
+	a stack would pick a branch and then explore it to the end, where a queue 
+	would explore all paths equally fast, this could result in a faster search
+	algorithm as you can then trim your possible tree to only the paths sorter 
+	than the current best path. I believe that the queue search should have 
+	around a n log(n) runtime where using stacks it will have a n^2 runtime 
+	where n is the longest path, because the queue search will end up exploring 
+	less of the total map with more branches, and stacks will pick one branch and
+	explore it to its fullest so it will have to explore every branch up until its 
+	finished
