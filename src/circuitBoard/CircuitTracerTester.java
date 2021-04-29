@@ -628,7 +628,7 @@ public class CircuitTracerTester {
 		try {
 			// run CircuitTracer with the specified storage argument (-s or -q), output
 			// target argument (-c or -g), and input file argument
-			ProcessBuilder ctProcessBuilder = new ProcessBuilder("java", "CircuitTracer", storage, outputTarget,
+			ProcessBuilder ctProcessBuilder = new ProcessBuilder("java", "circuitBoard" + File.separator + "CircuitTracer.java", storage, outputTarget,
 					fileName);
 			File outfile = new File(fileName + ".out");
 			ctProcessBuilder.redirectErrorStream(true);
@@ -714,7 +714,7 @@ public class CircuitTracerTester {
 		try {
 			// run CircuitTracer with the specified storage argument (-s or -q), output
 			// target argument (-c or -g), and input file argument
-			ProcessBuilder ctProcessBuilder = new ProcessBuilder("java", "CircuitTracer", storage, outputTarget,
+			ProcessBuilder ctProcessBuilder = new ProcessBuilder("java", "circuitBoard" + File.separator + "CircuitTracer.java", storage, outputTarget,
 					fileName);
 			File outfile = new File(fileName + ".out");
 			ctProcessBuilder.redirectErrorStream(true);
@@ -848,7 +848,7 @@ public class CircuitTracerTester {
 			// arguments
 			String[] processArgs = new String[args.length + 2];
 			processArgs[0] = "java";
-			processArgs[1] = "CircuitTracer";
+			processArgs[1] = "circuitBoard" + File.separator + "CircuitTracer.java";
 			for (int i = 0; i < args.length; i++) {
 				processArgs[i + 2] = args[i];
 			}
@@ -948,7 +948,7 @@ public class CircuitTracerTester {
 		System.out.println("or for GUI to open and no console output.");
 		try {
 			// run CircuitTracer with the specified arguments
-			ProcessBuilder ctProcessBuilder = new ProcessBuilder("java", "CircuitTracer", storage, GUI, fileName);
+			ProcessBuilder ctProcessBuilder = new ProcessBuilder("java", "circuitBoard" + File.separator + "CircuitTracer.java", storage, GUI, fileName);
 			File outfile = new File("gui.out");
 			ctProcessBuilder.redirectErrorStream(true);
 			ctProcessBuilder.redirectOutput(outfile);

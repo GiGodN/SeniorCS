@@ -35,6 +35,7 @@ public class CircuitTracer {
 		// any command line args
 		// See https://en.wikipedia.org/wiki/Usage_message for format and content
 		// guidance
+		System.out.println("Usage: java CircuitTracer [-q queue | -s stack ] [-c console | -g gui] filename\n" );
 	}
 
 	/**
@@ -56,6 +57,9 @@ public class CircuitTracer {
 		case "-q":
 			store = new Storage<TraceState>(Storage.DataStructure.queue);
 			break;
+		default:
+			printUsage();
+			return;
 		}
 		try {
 			board = new CircuitBoard(args[2]);
@@ -81,6 +85,9 @@ public class CircuitTracer {
 		case "-g":
 			System.out.println("GUI mode is currently unsupported");
 			break;
+		default:
+			printUsage();
+			return;
 		}
 	}
 
