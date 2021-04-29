@@ -4,6 +4,7 @@ import java.awt.Point;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Scanner;
 
 /**
@@ -22,7 +23,6 @@ public class CircuitBoard {
 	//constants you may find useful
 	private final int ROWS; //initialized in constructor
 	private final int COLS; //initialized in constructor
-	private final char[] vals;
 	private final char OPEN = 'O'; //capital 'o'
 	private final char CLOSED = 'X';
 	private final char TRACE = 'T';
@@ -53,7 +53,6 @@ public class CircuitBoard {
 		// throw FileNotFoundException if Scanner cannot read the file
 		// throw InvalidFileFormatException if any formatting or parsing issues are encountered
 		
-		vals = new char[] {OPEN, CLOSED, TRACE, START, END};
 		ROWS = fileScan.nextInt(); //replace with initialization statements using values from file
 		COLS = fileScan.nextInt();
 		board = new char[ROWS][COLS];
@@ -61,7 +60,7 @@ public class CircuitBoard {
 		for(int y = 0; y < ROWS; y++) {
 			for(int x = 0; x < COLS; x++) {
 				char temp = fileScan.next().charAt(0);
-				if(!Arrays.asList(vals).contains((Object)temp)) throw new InvalidFileFormatException(filename);
+				if(ALLOWED_CHARS.indexOf(temp) == -1) throw new InvalidFileFormatException(filename);
 				board[y][x] = temp;
 				if(temp == '1') startingPoint = new Point(x, y);
 				if(temp == '2') endingPoint = new Point(x, y);
@@ -76,7 +75,6 @@ public class CircuitBoard {
 	 * @param original board to copy
 	 */
 	public CircuitBoard(CircuitBoard original) {
-		vals = new char[] {OPEN, CLOSED, TRACE, START, END};
 		board = original.getBoard();
 		startingPoint = new Point(original.startingPoint);
 		endingPoint = new Point(original.endingPoint);

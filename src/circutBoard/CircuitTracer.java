@@ -1,6 +1,7 @@
 package circutBoard;
 
 import java.awt.Point;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 /**
@@ -12,6 +13,10 @@ import java.util.ArrayList;
  * @author mvail
  */
 public class CircuitTracer {
+	
+	private Storage<TraceState> store;
+	private CircuitBoard board;
+	private ArrayList<TraceState> best;
 
 	/** launch the program
 	 * @param args three required arguments:
@@ -42,10 +47,65 @@ public class CircuitTracer {
 			printUsage();
 			return; //exit the constructor immediately
 		}
-		//TODO: initialize the Storage to use either a stack or queue
-		//TODO: read in the CircuitBoard from the given file
-		//TODO: run the search for best paths
-		//TODO: output results to console or GUI, according to specified choice
+		switch(args[0]) {
+		case "-s": 
+			store = new Storage<TraceState>(Storage.DataStructure.stack);
+			break;
+		case "-q":
+			store = new Storage<TraceState>(Storage.DataStructure.queue);
+			break;
+		}
+		try {
+			board = new CircuitBoard(args[2]);
+		}
+		catch (FileNotFoundException e) {
+			System.err.println("Issue parsing file, may be an invalid file name");
+			return;
+		}
+		best = new ArrayList<TraceState>();
+		findPath();
+		switch(args[1]) {
+		case "-c":
+			for(TraceState path : best) {
+				CircuitBoard temp = new CircuitBoard(board);
+				for(Point p : path.getPath()) {
+					temp.makeTrace((int)p.getX(), (int)p.getY());
+				}
+				System.out.println(temp + "\n");
+			}
+			break;
+		case "-g":
+			System.out.println("GUI mode is currently unsupported");
+			break;
+		}
+	}
+	
+	private void findPath() {
+		double startX = board.getStartingPoint().getX(), startY = board.getStartingPoint().getY();
+		if(startY-1 >= 0 && board.isOpen((int)startX, (int)startY-1)) store.store(new TraceState(board, (int)startX, (int)startY-1));
+		if(startY+1 <= board.numRows() && board.isOpen((int)startX, (int)startY+1)) store.store(new TraceState(board, (int)startX, (int)startY+1));
+		if(startX-1 >= 0 && board.isOpen((int)startX-1, (int)startY)) store.store(new TraceState(board, (int)startX-1, (int)startY));
+		if(startX+1 <= board.numCols() && board.isOpen((int)startX+1, (int)startY)) store.store(new TraceState(board, (int)startX+1, (int)startY));
+		while(!store.isEmpty()) {
+			TraceState state = store.retrieve();
+			double y = state.getRow(), x = state.getCol();
+			double targetY = board.getEndingPoint().getY(), targetX = board.getEndingPoint().getX();
+			if(state.isComplete()) {
+				if(best.isEmpty() || best.get(0).pathLength() == state.pathLength()) best.add(state);
+				else if(best.get(0).pathLength() > state.pathLength()) {
+					best.clear();
+					best.add(state);
+				}
+				continue;
+			}
+			if(best.isEmpty() || best.get(0).pathLength() >  state.pathLength()) {
+				double lastX = state.getPath().get(state.pathLength()-1).getX(), lastY = state.getPath().get(state.pathLength()-1).getY();
+				if(y-1 >= 0 && y-1 != lastY && state.isOpen((int)x, (int)y-1)) store.store(new TraceState(state, (int)x, (int)y-1));
+				if(y+1 <= board.numRows() && y+1 != lastY && state.isOpen((int)x, (int)y+1)) store.store(new TraceState(state, (int)x, (int)y+1));
+				if(x-1 >= 0 && x-1 != lastX && state.isOpen((int)x-1, (int)y)) store.store(new TraceState(state, (int)x-1, (int)y));
+				if(x+1 <= board.numCols() && x+1 != lastX && state.isOpen((int)x+1, (int)y)) store.store(new TraceState(state, (int)x+1, (int)y));
+			}
+		}
 	}
 	
 } // class CircuitTracer
