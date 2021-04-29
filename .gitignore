@@ -1,1 +1,4 @@
-bin/
+bin/*
+*.class
+/src/*.dat
+/src/*.out
