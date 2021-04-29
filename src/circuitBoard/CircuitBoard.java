@@ -4,6 +4,8 @@ import java.awt.Point;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.nio.file.FileSystems;
+import java.util.InputMismatchException;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 /**
@@ -50,44 +52,65 @@ public class CircuitBoard {
 				+ "src" + File.separator + "circuitBoard" + File.separator + "more_boards" + File.separator + filename));
 		
 		Scanner line = new Scanner(fileScan.nextLine());
-		ROWS = line.nextInt();
-		COLS = line.nextInt();
-		if(line.hasNext()) {
-			fileScan.close();
+		try {
+			ROWS = line.nextInt();
+			COLS = line.nextInt();
+			if(line.hasNext()) {
+				fileScan.close();
+				line.close();
+				throw new InvalidFileFormatException(filename);
+			}
+		}
+		catch(InputMismatchException e) {
 			line.close();
 			throw new InvalidFileFormatException(filename);
 		}
 		line.close();
 		int x = 0;
 		board = new char[ROWS][COLS];
-		while(x < ROWS) {
-			Scanner nextLine = new Scanner(fileScan.nextLine());
-			int y = 0;
-			while(y < COLS) {
-				char temp = nextLine.next().charAt(0);
-				if(ALLOWED_CHARS.indexOf(temp) == -1 && temp != 'T') {
+		try {
+			while(x < ROWS) {
+				Scanner nextLine = new Scanner(fileScan.nextLine());
+				int y = 0;
+				while(y < COLS) {
+					char temp = nextLine.next().charAt(0);
+					if(ALLOWED_CHARS.indexOf(temp) == -1 && temp != 'T') {
+						nextLine.close();
+						fileScan.close();
+						throw new InvalidFileFormatException(filename);
+					}
+					board[x][y] = temp;
+					if(temp == '1' && startingPoint == null) startingPoint = new Point(x, y);
+					else if (startingPoint != null && temp == '1') {
+						nextLine.close();
+						fileScan.close();
+						throw new InvalidFileFormatException(filename);
+					}
+					if(temp == '2' && endingPoint == null) endingPoint = new Point(x, y);
+					else if (endingPoint != null && temp == '2') {
+						nextLine.close();
+						fileScan.close();
+						throw new InvalidFileFormatException(filename);
+					}
+					y++;
+				}
+				if(nextLine.hasNext()) {
 					nextLine.close();
 					fileScan.close();
 					throw new InvalidFileFormatException(filename);
 				}
-				board[x][y] = temp;
-				if(temp == '1') startingPoint = new Point(x, y);
-				if(temp == '2') endingPoint = new Point(x, y);
-				y++;
-			}
-			if(nextLine.hasNext()) {
+				x++;
 				nextLine.close();
+			}
+			if(fileScan.hasNext() || startingPoint == null || endingPoint == null) {
 				fileScan.close();
 				throw new InvalidFileFormatException(filename);
 			}
-			x++;
-			nextLine.close();
-		}
-		if(fileScan.hasNext()) {
 			fileScan.close();
+		}
+		catch(NoSuchElementException e) {
 			throw new InvalidFileFormatException(filename);
 		}
-		fileScan.close();
 	}
 	
 	/** Copy constructor - duplicates original board

@@ -61,21 +61,22 @@ public class CircuitTracer {
 			board = new CircuitBoard(args[2]);
 		}
 		catch (Exception e) {
-			System.err.println("Issue parsing file, may be an invalid file name");
-			e.printStackTrace();
+			System.err.println("Error pasing file, error thrown was: " + e.toString());
 			return;
 		}
 		best = new ArrayList<TraceState>();
 		findPath();
 		switch (args[1]) {
 		case "-c":
+			String s = "";
 			for (TraceState path : best) {
 				CircuitBoard temp = new CircuitBoard(board);
 				for (Point p : path.getPath()) {
 					temp.makeTrace((int) p.getX(), (int) p.getY());
 				}
-				System.out.println(temp + "\n");
+				s += temp + "\n";
 			}
+			System.out.print(s.strip());
 			break;
 		case "-g":
 			System.out.println("GUI mode is currently unsupported");
