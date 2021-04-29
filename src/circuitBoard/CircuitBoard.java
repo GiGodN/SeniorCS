@@ -3,8 +3,7 @@ package circuitBoard;
 import java.awt.Point;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.Arrays;
-import java.util.Collections;
+import java.nio.file.FileSystems;
 import java.util.Scanner;
 
 /**
@@ -47,26 +46,47 @@ public class CircuitBoard {
 	 * @throws InvalidFileFormatException for any other format or content issue that prevents reading a valid input file
 	 */
 	public CircuitBoard(String filename) throws FileNotFoundException {
-		Scanner fileScan = new Scanner(new File(filename));
+		Scanner fileScan = new Scanner(new File(FileSystems.getDefault().getPath("").toAbsolutePath() + File.separator
+				+ "src" + File.separator + "circuitBoard" + File.separator + "more_boards" + File.separator + filename));
 		
-		//TODO: parse the given file to populate the char[][]
-		// throw FileNotFoundException if Scanner cannot read the file
-		// throw InvalidFileFormatException if any formatting or parsing issues are encountered
-		
-		ROWS = fileScan.nextInt(); //replace with initialization statements using values from file
-		COLS = fileScan.nextInt();
+		Scanner line = new Scanner(fileScan.nextLine());
+		ROWS = line.nextInt();
+		COLS = line.nextInt();
+		if(line.hasNext()) {
+			fileScan.close();
+			line.close();
+			throw new InvalidFileFormatException(filename);
+		}
+		line.close();
+		int x = 0;
 		board = new char[ROWS][COLS];
-		
-		for(int y = 0; y < ROWS; y++) {
-			for(int x = 0; x < COLS; x++) {
-				char temp = fileScan.next().charAt(0);
-				if(ALLOWED_CHARS.indexOf(temp) == -1) throw new InvalidFileFormatException(filename);
-				board[y][x] = temp;
+		while(x < ROWS) {
+			Scanner nextLine = new Scanner(fileScan.nextLine());
+			int y = 0;
+			while(y < COLS) {
+				char temp = nextLine.next().charAt(0);
+				if(ALLOWED_CHARS.indexOf(temp) == -1 && temp != 'T') {
+					nextLine.close();
+					fileScan.close();
+					throw new InvalidFileFormatException(filename);
+				}
+				board[x][y] = temp;
 				if(temp == '1') startingPoint = new Point(x, y);
 				if(temp == '2') endingPoint = new Point(x, y);
+				y++;
 			}
+			if(nextLine.hasNext()) {
+				nextLine.close();
+				fileScan.close();
+				throw new InvalidFileFormatException(filename);
+			}
+			x++;
+			nextLine.close();
 		}
-		
+		if(fileScan.hasNext()) {
+			fileScan.close();
+			throw new InvalidFileFormatException(filename);
+		}
 		fileScan.close();
 	}
 	

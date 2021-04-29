@@ -107,7 +107,7 @@ public class CircuitTracerTester {
 		// simply here to ensure that CircuitTracer is compiled
 		// when CircuitTracerTester is compiled
 		try {
-			String[] someArgs = { "-s", "-c", VALID_0_FILENAME };
+			String[] someArgs = { "-s", "-c", VALID_1_FILENAME };
 			CircuitTracer neverUsed = new CircuitTracer(someArgs);
 			neverUsed.toString(); // don't care, just calling something
 		} catch (Exception e) {
