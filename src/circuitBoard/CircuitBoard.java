@@ -64,42 +64,42 @@ public class CircuitBoard {
 			throw new InvalidFileFormatException(filename);
 		}
 		line.close();
-		int x = 0;
+		int y = 0;
 		board = new char[ROWS][COLS];
 		try {
-			while (x < ROWS) {
+			while (y < ROWS) {
 				Scanner nextLine = new Scanner(fileScan.nextLine());
-				int y = 0;
-				while (y < COLS) {
+				int x = 0;
+				while (x < COLS) {
 					char temp = nextLine.next().charAt(0);
 					if (ALLOWED_CHARS.indexOf(temp) == -1 && temp != 'T') {
 						nextLine.close();
 						fileScan.close();
 						throw new InvalidFileFormatException(filename);
 					}
-					board[x][y] = temp;
+					board[y][x] = temp;
 					if (temp == '1' && startingPoint == null)
-						startingPoint = new Point(x, y);
+						startingPoint = new Point(y, x);
 					else if (startingPoint != null && temp == '1') {
 						nextLine.close();
 						fileScan.close();
 						throw new InvalidFileFormatException(filename);
 					}
 					if (temp == '2' && endingPoint == null)
-						endingPoint = new Point(x, y);
+						endingPoint = new Point(y, x);
 					else if (endingPoint != null && temp == '2') {
 						nextLine.close();
 						fileScan.close();
 						throw new InvalidFileFormatException(filename);
 					}
-					y++;
+					x++;
 				}
 				if (nextLine.hasNext()) {
 					nextLine.close();
 					fileScan.close();
 					throw new InvalidFileFormatException(filename);
 				}
-				x++;
+				y++;
 				nextLine.close();
 			}
 			if (fileScan.hasNext() || startingPoint == null || endingPoint == null) {

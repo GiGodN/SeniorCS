@@ -1,8 +1,20 @@
 package circuitBoard;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridLayout;
 import java.awt.Point;
-import java.io.FileNotFoundException;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
+
+import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 /**
  * Search for shortest paths between start and end points on a circuit board as
@@ -17,6 +29,9 @@ public class CircuitTracer {
 	private Storage<TraceState> store;
 	private CircuitBoard board;
 	private ArrayList<TraceState> best;
+	private JFrame frame;
+	private final int WIDTH = 900, HEIGHT = 500;
+	private JPanel boardContainer;
 
 	/**
 	 * launch the program
@@ -83,7 +98,8 @@ public class CircuitTracer {
 			System.out.print(s.strip());
 			break;
 		case "-g":
-			System.out.println("GUI mode is currently unsupported");
+			initWindow();
+			frame.setVisible(true);
 			break;
 		default:
 			printUsage();
@@ -91,6 +107,110 @@ public class CircuitTracer {
 		}
 	}
 
+	private void initWindow() {
+		frame = new JFrame("Results");
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setSize(WIDTH, HEIGHT);
+		JMenuBar mb = new JMenuBar();
+		JMenu m1 = new JMenu("File");
+		JMenu m2 = new JMenu("Help");
+		JMenuItem m1i1 = new JMenuItem("Quit");
+		m1i1.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
+			}
+		});
+		m1.add(m1i1);
+		JMenuItem m2i1 = new JMenuItem("About...");
+		m2i1.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JOptionPane.showMessageDialog(frame, "Circuit Tracing Search Program\\nWritten by Noah John(GitHub.com/GiGodN/)");
+			}
+		});
+		m2.add(m2i1);
+		mb.add(m1);
+		mb.add(m2);
+		mb.setPreferredSize(new Dimension(100, 25));
+		frame.add(BorderLayout.NORTH, mb);
+		JPanel subWindow = new JPanel();
+		subWindow.setPreferredSize(new Dimension(WIDTH, HEIGHT-25));
+		initInternalWindow(subWindow);
+		frame.add(BorderLayout.CENTER, subWindow);
+	}
+	
+	private void initInternalWindow(JPanel frame) {
+		frame.setLayout(new GridLayout(1, 3));
+		boardContainer = new JPanel();
+		initBoardContainer(-1);
+		boardContainer.setVisible(true);
+		GridBagConstraints boardC = new GridBagConstraints();
+		boardC.gridwidth = GridBagConstraints.RELATIVE;
+		frame.add(boardContainer, boardC);
+		JPanel listPanel = initListPanel();
+		frame.add(listPanel);
+	}
+	
+	private void initBoardContainer(int index) {
+		boardContainer.removeAll();
+		boardContainer.setLayout(new GridLayout(this.board.numRows(), this.board.numCols()));
+		if(index == -1) {
+			CircuitBoard temp = new CircuitBoard(this.board);
+			Font f = new Font(Font.SANS_SERIF, Font.PLAIN, 30);
+			for(int y = 0; y < this.board.numRows(); y++) {
+				for(int x = 0; x < this.board.numCols(); x++) {
+					JPanel p = new JPanel();
+					JLabel l = new JLabel(temp.charAt(y, x) + "");
+					l.setFont(f);
+					if(temp.charAt(y, x) == 'T') l.setForeground(Color.RED);
+					p.add(l);
+					p.setVisible(true);
+					boardContainer.add(p);
+				}
+			}
+			return;
+		}
+		CircuitBoard temp = new CircuitBoard(this.board);
+		for (Point p : best.get(index).getPath()) {
+			temp.makeTrace((int) p.getX(), (int) p.getY());
+		}
+		Font f = new Font(Font.SANS_SERIF, Font.PLAIN, 30);
+		for(int y = 0; y < this.board.numRows(); y++) {
+			for(int x = 0; x < this.board.numCols(); x++) {
+				JPanel p = new JPanel();
+				JLabel l = new JLabel(temp.charAt(y, x) + "");
+				l.setFont(f);
+				if(temp.charAt(y, x) == 'T') l.setForeground(Color.RED);
+				p.add(l);
+				p.setVisible(true);
+				boardContainer.add(p);
+			}
+		}
+	}
+	
+	private JPanel initListPanel() {
+		JPanel frame = new JPanel();
+		ArrayList<String> names = new ArrayList<String>();
+		names.add("Initial");
+		for(int i = 1; i <= best.size(); i++) {
+			names.add("Solution " + i);
+		}
+		JList<String> list = new JList<String>(names.toArray(new String[names.size()]));
+		list.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 20));
+		list.setSelectedIndex(0);
+		list.addListSelectionListener(new ListSelectionListener() {
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				initBoardContainer(list.getSelectedIndex()-1);
+				boardContainer.validate();
+				boardContainer.repaint();
+			}
+		});
+		frame.add(list);
+		return frame;
+	}
+	
 	private void findPath() {
 		double startX = board.getStartingPoint().getX(), startY = board.getStartingPoint().getY();
 		if (board.isOpen((int) startX, (int) startY - 1))
