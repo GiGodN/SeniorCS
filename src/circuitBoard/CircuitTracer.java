@@ -65,6 +65,7 @@ public class CircuitTracer {
 			printUsage();
 			return; // exit the constructor immediately
 		}
+		//determine whether to use stacks or queues
 		switch (args[0]) {
 		case "-s":
 			store = new Storage<TraceState>(Storage.DataStructure.stack);
@@ -77,6 +78,7 @@ public class CircuitTracer {
 			return;
 		}
 		try {
+			//init the circuit board
 			board = new CircuitBoard(args[2]);
 		}
 		catch (Exception e) {
@@ -84,9 +86,11 @@ public class CircuitTracer {
 			return;
 		}
 		best = new ArrayList<TraceState>();
+		//run the search algorithm
 		findPath();
 		switch (args[1]) {
 		case "-c":
+			//print output to the command line
 			String s = "";
 			for (TraceState path : best) {
 				CircuitBoard temp = new CircuitBoard(board);
@@ -98,6 +102,7 @@ public class CircuitTracer {
 			System.out.print(s.strip());
 			break;
 		case "-g":
+			//create the window and set it to visible
 			initWindow();
 			frame.setVisible(true);
 			break;
@@ -211,8 +216,13 @@ public class CircuitTracer {
 		return frame;
 	}
 	
+	/**
+	 * Finds the path from start to finish
+	 */
 	private void findPath() {
+		//find the starting point
 		double startX = board.getStartingPoint().getX(), startY = board.getStartingPoint().getY();
+		//create the starting traces in non-occupied spaces
 		if (board.isOpen((int) startX, (int) startY - 1))
 			store.store(new TraceState(board, (int) startX, (int) startY - 1));
 		if (board.isOpen((int) startX, (int) startY + 1))
@@ -221,9 +231,12 @@ public class CircuitTracer {
 			store.store(new TraceState(board, (int) startX - 1, (int) startY));
 		if (board.isOpen((int) startX + 1, (int) startY))
 			store.store(new TraceState(board, (int) startX + 1, (int) startY));
+		//while path is not found
 		while (!store.isEmpty()) {
 			TraceState state = store.retrieve();
+			//get current x and y
 			double y = state.getCol(), x = state.getRow();
+			//if the path is a valid path add it to the best list
 			if (state.isComplete()) {
 				if (best.isEmpty() || best.get(0).pathLength() == state.pathLength())
 					best.add(state);
@@ -233,6 +246,7 @@ public class CircuitTracer {
 				}
 				continue;
 			}
+			//if the path goes longer then the best path don't add new traces
 			if (best.isEmpty() || best.get(0).pathLength() > state.pathLength()) {
 				double lastX, lastY;
 				try {
