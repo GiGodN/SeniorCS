@@ -371,7 +371,7 @@ public class IUDoubleLinkedList<T> implements IndexedUnsortedList<T> {
 
 		/**
 		 * Adds an element to the list behind the current index.
-		 * Will not affect the net call to next
+		 * Will not affect the next call to next
 		 * 
 		 * 
 		 * @param element to be added
