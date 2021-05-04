@@ -249,14 +249,17 @@ public class CircuitTracer {
 			//if the path goes longer then the best path don't add new traces
 			if (best.isEmpty() || best.get(0).pathLength() > state.pathLength()) {
 				double lastX, lastY;
-				try {
-					lastX = state.getPath().get(state.pathLength() - 2).getX();
+				//find the position of the previous trace in the path if the path is not empty
+				if(state.getPath().size() >=1) {
+					lastX = state.getPath().get(state.pathLength() - 1).getX();
 					lastY = state.getPath().get(state.pathLength() - 1).getY();
 				}
-				catch (IndexOutOfBoundsException e) {
+				//if the path is empty instantiate the last position to garbage
+				else {
 					lastX = -1;
 					lastY = -1;
 				}
+				//create the next trace states needed
 				if (y - 1 != lastY && state.isOpen((int) x, (int) y - 1))
 					store.store(new TraceState(state, (int) x, (int) y - 1));
 				if (y + 1 != lastY && state.isOpen((int) x, (int) y + 1))
