@@ -104,6 +104,7 @@ public class CircuitTracer {
 		case "-g":
 			//create the window and set it to visible
 			initWindow();
+			//show the window
 			frame.setVisible(true);
 			break;
 		default:
@@ -112,90 +113,144 @@ public class CircuitTracer {
 		}
 	}
 
+	/**
+	 * create the window and add every thing to it
+	 */
 	private void initWindow() {
+		//create the window
 		frame = new JFrame("Results");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(WIDTH, HEIGHT);
+		//create the menubar and the menuitems
 		JMenuBar mb = new JMenuBar();
 		JMenu m1 = new JMenu("File");
 		JMenu m2 = new JMenu("Help");
+		//option for quiting the window in the file menu
 		JMenuItem m1i1 = new JMenuItem("Quit");
 		m1i1.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				//close the window
 				frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
 			}
 		});
+		//add it to the file menu
 		m1.add(m1i1);
+		//create the about option in the help menu
 		JMenuItem m2i1 = new JMenuItem("About...");
 		m2i1.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				//show the dialog box
 				JOptionPane.showMessageDialog(frame, "Circuit Tracing Search Program\\nWritten by Noah John(GitHub.com/GiGodN/)");
 			}
 		});
+		//add it to the about menu
 		m2.add(m2i1);
+		
+		//add the about and file menus to the menubar
 		mb.add(m1);
 		mb.add(m2);
+		//set the size of the menubar
 		mb.setPreferredSize(new Dimension(100, 25));
+		//add the menubar to the top of the window
 		frame.add(BorderLayout.NORTH, mb);
+		//create a subPanel for the display grid
 		JPanel subWindow = new JPanel();
 		subWindow.setPreferredSize(new Dimension(WIDTH, HEIGHT-25));
+		//create the subwindow
 		initInternalWindow(subWindow);
+		//add the subwindow to the main frame
 		frame.add(BorderLayout.CENTER, subWindow);
 	}
 	
+	/**
+	 * create the subwindow, with all of the path information
+	 * @param frame the panel to add all of the subwindow stuff to
+	 */
 	private void initInternalWindow(JPanel frame) {
+		//create the grid layout for the off center dividing point
 		frame.setLayout(new GridLayout(1, 3));
+		//Initialize the boardContainer
 		boardContainer = new JPanel();
+		//create the board in the container
 		initBoardContainer(-1);
 		boardContainer.setVisible(true);
-		GridBagConstraints boardC = new GridBagConstraints();
-		boardC.gridwidth = GridBagConstraints.RELATIVE;
-		frame.add(boardContainer, boardC);
+		//add it to the subFrame
+		frame.add(boardContainer);
+		//create the list sub panel
 		JPanel listPanel = initListPanel();
 		frame.add(listPanel);
 	}
 	
+	/**
+	 * create the panel containing the board
+	 * @param index, the index of the path to be shown pass -1 to show no path
+	 */
 	private void initBoardContainer(int index) {
+		//empty the container
 		boardContainer.removeAll();
 		boardContainer.setLayout(new GridLayout(this.board.numRows(), this.board.numCols()));
+		//if the index is -1 create and show a board without traces
 		if(index == -1) {
+			//create a clone of the circuitBoard
 			CircuitBoard temp = new CircuitBoard(this.board);
+			//create a font for the board
 			Font f = new Font(Font.SANS_SERIF, Font.PLAIN, 30);
+			//iterate over the board and create a new panel for every node in the board
 			for(int y = 0; y < this.board.numRows(); y++) {
 				for(int x = 0; x < this.board.numCols(); x++) {
+					//create the panel
 					JPanel p = new JPanel();
+					//create the text label
 					JLabel l = new JLabel(temp.charAt(y, x) + "");
+					//set the font
 					l.setFont(f);
-					if(temp.charAt(y, x) == 'T') l.setForeground(Color.RED);
+					//add it to the panel
 					p.add(l);
 					p.setVisible(true);
+					//add the panel to the container
 					boardContainer.add(p);
 				}
 			}
+			//show the empty board
 			return;
 		}
+		//if passed the gaurd case create a new bard and replace all of the O on the path with traces
 		CircuitBoard temp = new CircuitBoard(this.board);
 		for (Point p : best.get(index).getPath()) {
 			temp.makeTrace((int) p.getX(), (int) p.getY());
 		}
+		//create the font
 		Font f = new Font(Font.SANS_SERIF, Font.PLAIN, 30);
+		//iterate over the board
 		for(int y = 0; y < this.board.numRows(); y++) {
 			for(int x = 0; x < this.board.numCols(); x++) {
+				//create the panel
 				JPanel p = new JPanel();
+				//create the text label
 				JLabel l = new JLabel(temp.charAt(y, x) + "");
+				//set the font
 				l.setFont(f);
+				//if the point is a trace set the color
 				if(temp.charAt(y, x) == 'T') l.setForeground(Color.RED);
+				//add the text to the panel
 				p.add(l);
 				p.setVisible(true);
+				//add the panel to the container
 				boardContainer.add(p);
 			}
 		}
 	}
 	
+	/**
+	 * create the list sub panel
+	 * @return returns the created panel
+	 */
 	private JPanel initListPanel() {
+		//create the panel to be returned
 		JPanel frame = new JPanel();
+		//create a list of the target names
 		ArrayList<String> names = new ArrayList<String>();
 		names.add("Initial");
 		for(int i = 1; i <= best.size(); i++) {

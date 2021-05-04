@@ -10,3 +10,22 @@ ANALYSIS:
 	less of the total map with more branches, and stacks will pick one branch and
 	explore it to its fullest so it will have to explore every branch up until its 
 	finished
+	
+DESIGN:
+
+	I just followed what was given, I created the sorting algorithm almost verbatim
+	to the algorithm overview. I did add some optimization where i stopped following
+	any path longer then the best path. The CircuitBoard constructor was a problem 
+	because of how I had my project set up. But i was able to fix some of the errors
+	by changing my project setup.
+	
+TESTING:
+
+	I used the provided input files and just made sure every file was doing what it needed.
+	I also used the provided test class to make sure I was passing every test. Most of the 
+	bugs I found were related to not throwing an error when I needed to, and these were
+	found using the invalid input files.
+	
+DISCUSSION:
+
+	
