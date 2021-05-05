@@ -256,17 +256,21 @@ public class CircuitTracer {
 		for(int i = 1; i <= best.size(); i++) {
 			names.add("Solution " + i);
 		}
+		//Add the names list to a JList
 		JList<String> list = new JList<String>(names.toArray(new String[names.size()]));
 		list.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 20));
 		list.setSelectedIndex(0);
+		//create the listener for the list selection changed
 		list.addListSelectionListener(new ListSelectionListener() {
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
+				//update and refresh the circuit board panel
 				initBoardContainer(list.getSelectedIndex()-1);
 				boardContainer.validate();
 				boardContainer.repaint();
 			}
 		});
+		//add the lost to the list panel and return the new panel
 		frame.add(list);
 		return frame;
 	}
