@@ -64,14 +64,12 @@ public class Sort {
 		IndexedUnsortedList<T> left = newList();
 		IndexedUnsortedList<T> right = newList();
 		ListIterator<T> iter = list.listIterator();
-		int i = 0;
 		while (iter.hasNext()) {
 			T val = iter.next();
-			if(i < list.size() / 2)
+			if(iter.nextIndex()-2 < list.size() / 2)
 				left.add(val);
 			else
 				right.add(val);
-			i++;
 		}
 		left = split(left);
 		right = split(right);
@@ -92,14 +90,12 @@ public class Sort {
 		IndexedUnsortedList<T> left = newList();
 		IndexedUnsortedList<T> right = newList();
 		ListIterator<T> iter = list.listIterator();
-		int i = 0;
 		while (iter.hasNext()) {
 			T val = iter.next();
-			if(i < list.size() / 2)
+			if(iter.nextIndex()-2 < list.size() / 2)
 				left.add(val);
 			else
 				right.add(val);
-			i++;
 		}
 		left = split(left);
 		right = split(right);
@@ -123,14 +119,12 @@ public class Sort {
 		IndexedUnsortedList<T> left = newList();
 		IndexedUnsortedList<T> right = newList();
 		ListIterator<T> iter = list.listIterator();
-		int i = 0;
 		while (iter.hasNext()) {
 			T val = iter.next();
-			if(i < list.size() / 2)
+			if(iter.nextIndex()-2 < list.size() / 2)
 				left.add(val);
 			else
 				right.add(val);
-			i++;
 		}
 		left = split(left, c);
 		right = split(right, c);
@@ -151,14 +145,12 @@ public class Sort {
 		IndexedUnsortedList<T> left = newList();
 		IndexedUnsortedList<T> right = newList();
 		ListIterator<T> iter = list.listIterator();
-		int i = 0;
 		while (iter.hasNext()) {
 			T val = iter.next();
-			if(i < list.size() / 2)
+			if(iter.nextIndex()-2 < list.size() / 2)
 				left.add(val);
 			else
 				right.add(val);
-			i++;
 		}
 		left = split(left, c);
 		right = split(right, c);
