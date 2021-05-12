@@ -64,7 +64,7 @@ public class Sort {
 		ListIterator<T> iter = list.listIterator();
 		while (iter.hasNext()) {
 			T val = iter.next();
-			if (iter.nextIndex() - 2 < list.size() / 2)
+			if (iter.nextIndex() - 1 < list.size() / 2)
 				left.add(val);
 			else
 				right.add(val);
@@ -91,7 +91,7 @@ public class Sort {
 		ListIterator<T> iter = list.listIterator();
 		while (iter.hasNext()) {
 			T val = iter.next();
-			if (iter.nextIndex() - 2 < list.size() / 2)
+			if (iter.nextIndex() - 1 < list.size() / 2)
 				left.add(val);
 			else
 				right.add(val);
