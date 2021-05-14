@@ -72,9 +72,10 @@ public class CircuitTracerTester {
 	 */
 	private void printTest(String testDesc, boolean result) {
 		totalRun++;
-		if (result) {
+		if(result) {
 			passes++;
-		} else {
+		}
+		else {
 			failures++;
 		}
 		System.out.printf("%-46s\t%s\n\n", testDesc, (result ? "   PASS" : "***FAIL***"));
@@ -90,7 +91,7 @@ public class CircuitTracerTester {
 		}
 		System.out.println(line);
 		System.out.println(verdict);
-		if (totalTests != EXPECTED_TOTAL_TESTS) {
+		if(totalTests != EXPECTED_TOTAL_TESTS) {
 			System.out.printf("Expected %d total tests, but evaluated %d.\n", EXPECTED_TOTAL_TESTS, totalTests);
 		}
 	}
@@ -110,7 +111,8 @@ public class CircuitTracerTester {
 			String[] someArgs = { "-s", "-c", VALID_1_FILENAME };
 			CircuitTracer neverUsed = new CircuitTracer(someArgs);
 			neverUsed.toString(); // don't care, just calling something
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			// don't care
 		}
 
@@ -166,7 +168,8 @@ public class CircuitTracerTester {
 					testCircuitBoard(INVALID_11_FILENAME, INVALID_11, Result.InvalidFileFormat));
 			printTest("CircuitBoard(\"" + INVALID_12_FILENAME + "\")",
 					testCircuitBoard(INVALID_12_FILENAME, INVALID_12, Result.InvalidFileFormat));
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			System.out.printf("***UNABLE TO RUN/COMPLETE CIRCUITBOARD TESTS\n");
 			e.printStackTrace();
 		}
@@ -219,7 +222,8 @@ public class CircuitTracerTester {
 					testCircuitTracerValidFileCmdLine(STACK, CONSOLE, VALID_10_FILENAME, VALID_10_SOLUTIONS));
 			printTest("java CircuitTracer -q -c " + VALID_10_FILENAME,
 					testCircuitTracerValidFileCmdLine(QUEUE, CONSOLE, VALID_10_FILENAME, VALID_10_SOLUTIONS));
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			System.out.printf("***UNABLE TO RUN/COMPLETE CIRCUITTRACER TESTS ON VALID INPUT FILES\n");
 			e.printStackTrace();
 		}
@@ -286,7 +290,8 @@ public class CircuitTracerTester {
 					testCircuitTracerInvalidFileCmdLine(STACK, CONSOLE, NO_SUCH));
 			printTest("java CircuitTracer -q -c " + NO_SUCH,
 					testCircuitTracerInvalidFileCmdLine(QUEUE, CONSOLE, NO_SUCH));
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			System.out.printf("***UNABLE TO RUN/COMPLETE CIRCUITTRACER TESTS ON INVALID INPUT FILES\n");
 			e.printStackTrace();
 		}
@@ -305,23 +310,18 @@ public class CircuitTracerTester {
 					testCircuitTracerArgs(STACK, INVALID_OPTION, VALID_1_FILENAME));
 			printTest("java CircuitTracer -q -z " + VALID_1_FILENAME,
 					testCircuitTracerArgs(QUEUE, INVALID_OPTION, VALID_1_FILENAME));
-			printTest("java CircuitTracer -s " + VALID_1_FILENAME, 
-					testCircuitTracerArgs(STACK, VALID_1_FILENAME));
-			printTest("java CircuitTracer -q " + VALID_1_FILENAME, 
-					testCircuitTracerArgs(QUEUE, VALID_1_FILENAME));
+			printTest("java CircuitTracer -s " + VALID_1_FILENAME, testCircuitTracerArgs(STACK, VALID_1_FILENAME));
+			printTest("java CircuitTracer -q " + VALID_1_FILENAME, testCircuitTracerArgs(QUEUE, VALID_1_FILENAME));
 			printTest("java CircuitTracer -s -c -z " + VALID_1_FILENAME,
 					testCircuitTracerArgs(STACK, CONSOLE, INVALID_OPTION, VALID_1_FILENAME));
 			printTest("java CircuitTracer -q -c -z " + VALID_1_FILENAME,
 					testCircuitTracerArgs(QUEUE, CONSOLE, INVALID_OPTION, VALID_1_FILENAME));
-			printTest("java CircuitTracer -s -c", 
-					testCircuitTracerArgs(STACK, CONSOLE));
-			printTest("java CircuitTracer -q -c", 
-					testCircuitTracerArgs(QUEUE, CONSOLE));
-			printTest("java CircuitTracer", 
-					testCircuitTracerArgs());
-			printTest("java CircuitTracer " + VALID_1_FILENAME, 
-					testCircuitTracerArgs(VALID_1_FILENAME));
-		} catch (Exception e) {
+			printTest("java CircuitTracer -s -c", testCircuitTracerArgs(STACK, CONSOLE));
+			printTest("java CircuitTracer -q -c", testCircuitTracerArgs(QUEUE, CONSOLE));
+			printTest("java CircuitTracer", testCircuitTracerArgs());
+			printTest("java CircuitTracer " + VALID_1_FILENAME, testCircuitTracerArgs(VALID_1_FILENAME));
+		}
+		catch (Exception e) {
 			System.out.printf("***UNABLE TO RUN/COMPLETE CIRCUITTRACER TESTS WITH INVALID COMMAND LINE ARGUMENTS\n");
 			e.printStackTrace();
 		}
@@ -334,7 +334,8 @@ public class CircuitTracerTester {
 		try {
 			printTest("java CircuitTracer -s -g " + VALID_1_FILENAME, testCircuitTracerGui(STACK, VALID_1_FILENAME));
 			printTest("java CircuitTracer -q -g " + VALID_1_FILENAME, testCircuitTracerGui(QUEUE, VALID_1_FILENAME));
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			System.out.printf("***UNABLE TO RUN/COMPLETE CIRCUITTRACER TESTS WITH GUI OUTPUT SPECIFIED\n");
 			e.printStackTrace();
 		}
@@ -358,38 +359,44 @@ public class CircuitTracerTester {
 	private boolean testCircuitBoard(String fileName, char[][] contents, Result expectedResult) {
 		totalTests += 1;
 		System.out.printf("Testing CircuitBoard(\"%s\")\n", fileName);
-		if (expectedResult == Result.FileNotFound) {
+		if(expectedResult == Result.FileNotFound) {
 			System.out.println("Expecting FileNotFoundException.");
-		} else if (expectedResult == Result.InvalidFileFormat) {
+		}
+		else if(expectedResult == Result.InvalidFileFormat) {
 			System.out.println("Expecting InvalidFileFormatException.");
 		}
 		Result result;
 		try {
 			CircuitBoard board = new CircuitBoard(fileName);
 			result = Result.MatchingContents;
-			if (contents.length != board.numRows() || contents[0].length != board.numCols()) {
+			if(contents.length != board.numRows() || contents[0].length != board.numCols()) {
 				result = Result.Fail;
-			} else {
+			}
+			else {
 				for (int row = 0; row < contents.length; row++) {
 					for (int col = 0; col < contents[row].length; col++) {
-						if (contents[row][col] != board.charAt(row, col)) {
+						if(contents[row][col] != board.charAt(row, col)) {
 							result = Result.Fail;
 						}
 					}
 				}
 			}
-			if (result == Result.Fail) {
+			if(result == Result.Fail) {
 				System.out.println("CircuitBoard contents do not match expected values");
-			} else {
+			}
+			else {
 				System.out.println("CircuitBoard contents match expected values.");
 			}
-		} catch (InvalidFileFormatException e) {
+		}
+		catch (InvalidFileFormatException e) {
 			System.out.println(e.toString());
 			result = Result.InvalidFileFormat;
-		} catch (FileNotFoundException e) {
+		}
+		catch (FileNotFoundException e) {
 			System.out.println(e.toString());
 			result = Result.FileNotFound;
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			e.printStackTrace(System.out);
 			result = Result.UnexpectedException;
 		}
@@ -402,24 +409,22 @@ public class CircuitTracerTester {
 
 	/**
 	 * Confirm CircuitTracer constructor reports messages and exits cleanly when
-	 * given an invalid input file.
-	 * In case you're curious, the code below does several cool things that
-	 * might not make sense at first glance.
-	 * In order to capture the console output from CircuitTracer() for analysis,
-	 * I'm redirecting the standard System output and error streams that are 
-	 * usually mapped to the console to a PrintStream connected to a file, 
-	 * before calling CircuitTracer(), then reattaching them to the console 
-	 * after the constructor has completed (or been killed).
-	 * Being able to kill another program after some reasonable time has passed
-	 * is also necessary, because it's possible that some people's CircuitTracer
-	 * might go into an endless loop. To accomplish this, I'm running the
-	 * CircuitTracer in a separate Thread via an Executor (a Thread manager)
-	 * that allows a configurable time for the Thread to close itself before
-	 * pulling the plug. 
+	 * given an invalid input file. In case you're curious, the code below does
+	 * several cool things that might not make sense at first glance. In order to
+	 * capture the console output from CircuitTracer() for analysis, I'm redirecting
+	 * the standard System output and error streams that are usually mapped to the
+	 * console to a PrintStream connected to a file, before calling CircuitTracer(),
+	 * then reattaching them to the console after the constructor has completed (or
+	 * been killed). Being able to kill another program after some reasonable time
+	 * has passed is also necessary, because it's possible that some people's
+	 * CircuitTracer might go into an endless loop. To accomplish this, I'm running
+	 * the CircuitTracer in a separate Thread via an Executor (a Thread manager)
+	 * that allows a configurable time for the Thread to close itself before pulling
+	 * the plug.
 	 * 
-	 * @param storage        stack or queue
-	 * @param outputTarget   console or gui
-	 * @param fileName       input file
+	 * @param storage      stack or queue
+	 * @param outputTarget console or gui
+	 * @param fileName     input file
 	 * @return true if test passes, else false
 	 */
 	private boolean testCircuitTracerInvalidFile(String storage, String outputTarget, String fileName) {
@@ -446,16 +451,18 @@ public class CircuitTracerTester {
 			try {
 				executor.shutdown();
 				executor.awaitTermination(TIMEOUT, TimeUnit.SECONDS);
-			} catch (InterruptedException e) {
+			}
+			catch (InterruptedException e) {
 				// reset console stdout and stderr
 				System.setOut(consoleOut);
 				System.setErr(consoleErr);
 				System.out.println("CircuitTracer() has exceeded reasonable completion time");
-			} finally {
+			}
+			finally {
 				// reset console stdout and stderr
 				System.setOut(consoleOut);
 				System.setErr(consoleErr);
-				if (!executor.isTerminated()) {
+				if(!executor.isTerminated()) {
 					System.out.println("cancelling unfinished CircuitTracer()");
 				}
 				executor.shutdownNow();
@@ -473,32 +480,36 @@ public class CircuitTracerTester {
 				while (scan.hasNextLine()) {
 					line = scan.nextLine();
 					System.out.println(line);
-					if (line.contains("InvalidFileFormatException")) {
+					if(line.contains("InvalidFileFormatException")) {
 						includesInvalidFileFormatException = true;
-					} else if (line.contains("FileNotFoundException")) {
+					}
+					else if(line.contains("FileNotFoundException")) {
 						includesFileNotFoundException = true;
 					}
 					lineCount++;
 				}
 				System.out.println("***end output***");
 				scan.close();
-				if (!includesInvalidFileFormatException && !includesFileNotFoundException) {
+				if(!includesInvalidFileFormatException && !includesFileNotFoundException) {
 					System.out.println("Output missing expected exception name.");
 					result = Result.InvalidOutput;
 				}
-				if (lineCount > 3) { // arbitrarily allowing for a couple lines, but not stack trace
+				if(lineCount > 3) { // arbitrarily allowing for a couple lines, but not stack trace
 					System.out.println("Output exceeds expected brief descriptive exception message.");
 					result = Result.InvalidOutput;
 				}
-			} catch (FileNotFoundException e) {
+			}
+			catch (FileNotFoundException e) {
 				System.out.println("Unexpected FileNotFoundException");
 				result = Result.FileNotFound;
 			}
-		} catch (InvalidFileFormatException e) {
+		}
+		catch (InvalidFileFormatException e) {
 			result = Result.InvalidFileFormat;
 			System.out.println("Unhandled InvalidFileFormatException.");
 			System.out.println(e.getMessage());
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			result = Result.UnexpectedException;
 			System.out.println("Unexpected exception crashed the program.");
 			System.out.println("Program is expected to exit cleanly after reporting problems.");
@@ -509,20 +520,18 @@ public class CircuitTracerTester {
 
 	/**
 	 * Confirm CircuitTracer produces correct results in the expected output format
-	 * when given a valid input file.
-	 * In case you're curious, the code below does several cool things that
-	 * might not make sense at first glance.
-	 * In order to capture the console output from CircuitTracer() for analysis,
-	 * I'm redirecting the standard System output and error streams that are 
-	 * usually mapped to the console to a PrintStream connected to a file, 
-	 * before calling CircuitTracer(), then reattaching them to the console 
-	 * after the constructor has completed (or been killed).
-	 * Being able to kill another program after some reasonable time has passed
-	 * is also necessary, because it's possible that some people's CircuitTracer
-	 * might go into an endless loop. To accomplish this, I'm running the
-	 * CircuitTracer in a separate Thread via an Executor (a Thread manager)
-	 * that allows a configurable time for the Thread to close itself before
-	 * pulling the plug. 
+	 * when given a valid input file. In case you're curious, the code below does
+	 * several cool things that might not make sense at first glance. In order to
+	 * capture the console output from CircuitTracer() for analysis, I'm redirecting
+	 * the standard System output and error streams that are usually mapped to the
+	 * console to a PrintStream connected to a file, before calling CircuitTracer(),
+	 * then reattaching them to the console after the constructor has completed (or
+	 * been killed). Being able to kill another program after some reasonable time
+	 * has passed is also necessary, because it's possible that some people's
+	 * CircuitTracer might go into an endless loop. To accomplish this, I'm running
+	 * the CircuitTracer in a separate Thread via an Executor (a Thread manager)
+	 * that allows a configurable time for the Thread to close itself before pulling
+	 * the plug.
 	 * 
 	 * @param storage        stack or queue
 	 * @param outputTarget   console or gui
@@ -555,16 +564,18 @@ public class CircuitTracerTester {
 			try {
 				executor.shutdown();
 				executor.awaitTermination(TIMEOUT, TimeUnit.SECONDS);
-			} catch (InterruptedException e) {
+			}
+			catch (InterruptedException e) {
 				// reset console stdout and stderr
 				System.setOut(consoleOut);
 				System.setErr(consoleErr);
 				System.out.println("CircuitTracer() has exceeded reasonable completion time");
-			} finally {
+			}
+			finally {
 				// reset console stdout and stderr
 				System.setOut(consoleOut);
 				System.setErr(consoleErr);
-				if (!executor.isTerminated()) {
+				if(!executor.isTerminated()) {
 					System.out.println("cancelling unfinished CircuitTracer()");
 				}
 				executor.shutdownNow();
@@ -577,22 +588,26 @@ public class CircuitTracerTester {
 			// find all known solutions in outputSolutions
 			result = Result.ValidOutput;
 			for (int solution = 0; solution < solutions.length; solution++) {
-				if (!findSolution(solutions[solution], outputSolutions)) {
+				if(!findSolution(solutions[solution], outputSolutions)) {
 					result = Result.InvalidOutput;
 				}
 			}
-			if (result == Result.ValidOutput) {
+			if(result == Result.ValidOutput) {
 				System.out.println("Output matches expected content and format.");
-			} else {
+			}
+			else {
 				System.out.println("Output does NOT match expected content and format.");
 			}
-		} catch (InvalidOutputException e) {
+		}
+		catch (InvalidOutputException e) {
 			result = Result.InvalidOutput;
 			System.out.println("Output does NOT match expected content and format.");
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			result = Result.UnexpectedException;
 			e.printStackTrace(System.out);
-		} finally {
+		}
+		finally {
 			// reset console stdout and stderr
 			System.setOut(consoleOut);
 			System.setErr(consoleErr);
@@ -602,22 +617,20 @@ public class CircuitTracerTester {
 
 	/**
 	 * Confirm CircuitTracer reports messages and exits cleanly when given an
-	 * invalid input file.
-	 * In case you're curious, the code below does several cool things that
-	 * might not make sense at first glance.
-	 * In order to run another program as if it is being run from the command
-	 * line with command line arguments, I'm using a ProcessBuilder that
-	 * constructs a command line Process and then executes it. The ProcessBuilder
-	 * has functionality for specifying where standard output and error streams
-	 * should go, allowing me to capture all console output from CircuitTracer
-	 * for analysis. The Process then allows me to specify the maximum time it
-	 * is allowed to run before it will be forced to exit. That way a runaway 
-	 * CircuitTracer (most likely an endless loop) will not prevent this test
-	 * class from continuing to the next test.
+	 * invalid input file. In case you're curious, the code below does several cool
+	 * things that might not make sense at first glance. In order to run another
+	 * program as if it is being run from the command line with command line
+	 * arguments, I'm using a ProcessBuilder that constructs a command line Process
+	 * and then executes it. The ProcessBuilder has functionality for specifying
+	 * where standard output and error streams should go, allowing me to capture all
+	 * console output from CircuitTracer for analysis. The Process then allows me to
+	 * specify the maximum time it is allowed to run before it will be forced to
+	 * exit. That way a runaway CircuitTracer (most likely an endless loop) will not
+	 * prevent this test class from continuing to the next test.
 	 * 
-	 * @param storage        stack or queue
-	 * @param outputTarget   console or gui
-	 * @param fileName       input file
+	 * @param storage      stack or queue
+	 * @param outputTarget console or gui
+	 * @param fileName     input file
 	 * @return true if test passes, else false
 	 */
 	private boolean testCircuitTracerInvalidFileCmdLine(String storage, String outputTarget, String fileName) {
@@ -628,8 +641,8 @@ public class CircuitTracerTester {
 		try {
 			// run CircuitTracer with the specified storage argument (-s or -q), output
 			// target argument (-c or -g), and input file argument
-			ProcessBuilder ctProcessBuilder = new ProcessBuilder("java", "circuitBoard" + File.separator + "CircuitTracer.java", storage, outputTarget,
-					fileName);
+			ProcessBuilder ctProcessBuilder = new ProcessBuilder("java",
+					"circuitBoard" + File.separator + "CircuitTracer.java", storage, outputTarget, fileName);
 			File outfile = new File(fileName + ".out");
 			ctProcessBuilder.redirectErrorStream(true);
 			ctProcessBuilder.redirectOutput(outfile);
@@ -647,35 +660,40 @@ public class CircuitTracerTester {
 				while (scan.hasNextLine()) {
 					line = scan.nextLine();
 					System.out.println(line);
-					if (line.contains("InvalidFileFormatException")) {
+					if(line.contains("InvalidFileFormatException")) {
 						includesInvalidFileFormatException = true;
-					} else if (line.contains("FileNotFoundException")) {
+					}
+					else if(line.contains("FileNotFoundException")) {
 						includesFileNotFoundException = true;
 					}
 					lineCount++;
 				}
 				System.out.println("***end output***");
 				scan.close();
-				if (!includesInvalidFileFormatException && !includesFileNotFoundException) {
+				if(!includesInvalidFileFormatException && !includesFileNotFoundException) {
 					System.out.println("Output missing expected exception name.");
 					result = Result.InvalidOutput;
 				}
-				if (lineCount > 3) { // arbitrarily allowing for a couple lines, but not stack trace
+				if(lineCount > 3) { // arbitrarily allowing for a couple lines, but not stack trace
 					System.out.println("Output exceeds expected brief descriptive exception message.");
 					result = Result.InvalidOutput;
 				}
-			} catch (FileNotFoundException e) {
+			}
+			catch (FileNotFoundException e) {
 				System.out.println("Unexpected FileNotFoundException");
 				result = Result.FileNotFound;
 			}
-		} catch (InvalidFileFormatException e) {
+		}
+		catch (InvalidFileFormatException e) {
 			result = Result.InvalidFileFormat;
 			System.out.println("Unhandled InvalidFileFormatException.");
 			System.out.println(e.getMessage());
-		} catch (InterruptedException e) {
+		}
+		catch (InterruptedException e) {
 			result = Result.UnexpectedException;
 			System.out.println("Unable to complete CircuitTracer process in reasonable time.");
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			result = Result.UnexpectedException;
 			System.out.println("Unexpected exception crashed the program.");
 			System.out.println("Program is expected to exit cleanly after reporting problems.");
@@ -686,18 +704,16 @@ public class CircuitTracerTester {
 
 	/**
 	 * Confirm CircuitTracer produces correct results in the expected output format
-	 * when given a valid input file.
-	 * In case you're curious, the code below does several cool things that
-	 * might not make sense at first glance.
-	 * In order to run another program as if it is being run from the command
-	 * line with command line arguments, I'm using a ProcessBuilder that
-	 * constructs a command line Process and then executes it. The ProcessBuilder
-	 * has functionality for specifying where standard output and error streams
-	 * should go, allowing me to capture all console output from CircuitTracer
-	 * for analysis. The Process then allows me to specify the maximum time it
-	 * is allowed to run before it will be forced to exit. That way a runaway 
-	 * CircuitTracer (most likely an endless loop) will not prevent this test
-	 * class from continuing to the next test.
+	 * when given a valid input file. In case you're curious, the code below does
+	 * several cool things that might not make sense at first glance. In order to
+	 * run another program as if it is being run from the command line with command
+	 * line arguments, I'm using a ProcessBuilder that constructs a command line
+	 * Process and then executes it. The ProcessBuilder has functionality for
+	 * specifying where standard output and error streams should go, allowing me to
+	 * capture all console output from CircuitTracer for analysis. The Process then
+	 * allows me to specify the maximum time it is allowed to run before it will be
+	 * forced to exit. That way a runaway CircuitTracer (most likely an endless
+	 * loop) will not prevent this test class from continuing to the next test.
 	 * 
 	 * @param storage        stack or queue
 	 * @param outputTarget   console or gui
@@ -714,8 +730,8 @@ public class CircuitTracerTester {
 		try {
 			// run CircuitTracer with the specified storage argument (-s or -q), output
 			// target argument (-c or -g), and input file argument
-			ProcessBuilder ctProcessBuilder = new ProcessBuilder("java", "circuitBoard" + File.separator + "CircuitTracer.java", storage, outputTarget,
-					fileName);
+			ProcessBuilder ctProcessBuilder = new ProcessBuilder("java",
+					"circuitBoard" + File.separator + "CircuitTracer.java", storage, outputTarget, fileName);
 			File outfile = new File(fileName + ".out");
 			ctProcessBuilder.redirectErrorStream(true);
 			ctProcessBuilder.redirectOutput(outfile);
@@ -728,22 +744,26 @@ public class CircuitTracerTester {
 			// find all known solutions in outputSolutions
 			result = Result.ValidOutput;
 			for (int solution = 0; solution < solutions.length; solution++) {
-				if (!findSolution(solutions[solution], outputSolutions)) {
+				if(!findSolution(solutions[solution], outputSolutions)) {
 					result = Result.InvalidOutput;
 				}
 			}
-			if (result == Result.ValidOutput) {
+			if(result == Result.ValidOutput) {
 				System.out.println("Output matches expected content and format.");
-			} else {
+			}
+			else {
 				System.out.println("Output does NOT match expected content and format.");
 			}
-		} catch (InterruptedException e) {
+		}
+		catch (InterruptedException e) {
 			result = Result.UnexpectedException;
 			System.out.println("Unable to complete CircuitTracer process in reasonable time.");
-		} catch (InvalidOutputException e) {
+		}
+		catch (InvalidOutputException e) {
 			result = Result.InvalidOutput;
 			System.out.println("Output does NOT match expected content and format.");
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			result = Result.UnexpectedException;
 			e.printStackTrace(System.out);
 		}
@@ -767,23 +787,25 @@ public class CircuitTracerTester {
 			int row = 0;
 			while (fileScan.hasNextLine()) {
 				String line = fileScan.nextLine().trim();
-				if (line.length() == 0) { // blank line, separates solutions
+				if(line.length() == 0) { // blank line, separates solutions
 					solutions++;
 					row = 0;
-				} else if (solutions > expectedSolutions) { // extra content
+				}
+				else if(solutions > expectedSolutions) { // extra content
 					throw new InvalidOutputException();
-				} else { // not a blank line
+				}
+				else { // not a blank line
 					Scanner lineScan = new Scanner(line);
 					for (int col = 0; col < expectedCols; col++) {
 						String token = lineScan.next();
-						if (token.length() > 1) {
+						if(token.length() > 1) {
 							System.out.println("Invalid output: " + token);
 							lineScan.close();
 							throw new InvalidOutputException();
 						}
 						reportedSolutions[solutions][row][col] = token.charAt(0);
 					}
-					if (lineScan.hasNext()) {
+					if(lineScan.hasNext()) {
 						lineScan.close();
 						throw new InvalidOutputException();
 					}
@@ -791,9 +813,11 @@ public class CircuitTracerTester {
 					lineScan.close();
 				}
 			}
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			throw new InvalidOutputException();
-		} finally {
+		}
+		finally {
 			fileScan.close();
 		}
 		return reportedSolutions;
@@ -811,12 +835,12 @@ public class CircuitTracerTester {
 			boolean found = true;
 			for (int row = 0; row < solution.length; row++) {
 				for (int col = 0; col < solution[row].length; col++) {
-					if (solution[row][col] != reportedSolutions[candidate][row][col]) {
+					if(solution[row][col] != reportedSolutions[candidate][row][col]) {
 						found = false;
 					}
 				}
 			}
-			if (found) {
+			if(found) {
 				return true;
 			}
 		}
@@ -877,50 +901,52 @@ public class CircuitTracerTester {
 				while (scan.hasNextLine()) {
 					line = scan.nextLine();
 					System.out.println(line);
-					if (line.contains("-s"))
+					if(line.contains("-s"))
 						hasStackArg = true;
-					if (line.contains("-q"))
+					if(line.contains("-q"))
 						hasQueueArg = true;
-					if (line.contains("-c"))
+					if(line.contains("-c"))
 						hasConsoleArg = true;
-					if (line.contains("-g"))
+					if(line.contains("-g"))
 						hasGUIArg = true;
-					if (line.contains("java CircuitTracer"))
+					if(line.contains("java CircuitTracer"))
 						hasCircuitTracer = true;
-					if (line.toLowerCase().contains("stack"))
+					if(line.toLowerCase().contains("stack"))
 						hasStackDesc = true;
-					if (line.toLowerCase().contains("queue"))
+					if(line.toLowerCase().contains("queue"))
 						hasQueueDesc = true;
-					if (line.toLowerCase().contains("console"))
+					if(line.toLowerCase().contains("console"))
 						hasConsoleDesc = true;
-					if (line.toLowerCase().contains("gui"))
+					if(line.toLowerCase().contains("gui"))
 						hasGUIDesc = true;
-					if (line.contains("Exception"))
+					if(line.contains("Exception"))
 						hasException = true;
 				}
 				System.out.println("***end output***");
 				scan.close();
-				if (!hasCircuitTracer) {
+				if(!hasCircuitTracer) {
 					System.out.println("Missing 'java CircuitTracer' in usage message.");
 					result = Result.InvalidOutput;
 				}
-				if (!hasStackArg || !hasQueueArg || !hasConsoleArg || !hasGUIArg) {
+				if(!hasStackArg || !hasQueueArg || !hasConsoleArg || !hasGUIArg) {
 					System.out.println("Missing required cmd line args in usage message.");
 					result = Result.InvalidOutput;
 				}
-				if (!hasStackDesc || !hasQueueDesc || !hasConsoleDesc || !hasGUIDesc) {
+				if(!hasStackDesc || !hasQueueDesc || !hasConsoleDesc || !hasGUIDesc) {
 					System.out.println("Missing explanation of cmd line args in usage message.");
 					result = Result.InvalidOutput;
 				}
-				if (hasException) {
+				if(hasException) {
 					System.out.println("Inappropriate Exception following invalid cmd line args.");
 					result = Result.InvalidOutput;
 				}
-			} catch (FileNotFoundException e) {
+			}
+			catch (FileNotFoundException e) {
 				System.out.println("Unexpected FileNotFoundException");
 				result = Result.InvalidOutput;
 			}
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			result = Result.UnexpectedException;
 			System.out.println("Program crashed with unhandled exception.");
 			e.printStackTrace(System.out);
@@ -948,13 +974,14 @@ public class CircuitTracerTester {
 		System.out.println("or for GUI to open and no console output.");
 		try {
 			// run CircuitTracer with the specified arguments
-			ProcessBuilder ctProcessBuilder = new ProcessBuilder("java", "circuitBoard" + File.separator + "CircuitTracer.java", storage, GUI, fileName);
+			ProcessBuilder ctProcessBuilder = new ProcessBuilder("java",
+					"circuitBoard" + File.separator + "CircuitTracer.java", storage, GUI, fileName);
 			File outfile = new File("gui.out");
 			ctProcessBuilder.redirectErrorStream(true);
 			ctProcessBuilder.redirectOutput(outfile);
 			Process ctProcess = ctProcessBuilder.start();
 			boolean ctProcessExited = ctProcess.waitFor(TIMEOUT, TimeUnit.SECONDS);
-			if (!ctProcessExited) { // GUI is likely open and waiting
+			if(!ctProcessExited) { // GUI is likely open and waiting
 				ctProcess.destroy(); // end the process
 			}
 			result = Result.ValidOutput; // until proven guilty
@@ -965,26 +992,28 @@ public class CircuitTracerTester {
 				System.out.println("***begin console output***");
 				while (scan.hasNextLine()) {
 					System.out.println(scan.nextLine());
-					if (!ctProcessExited) { // GUI ran, so no console output allowed
+					if(!ctProcessExited) { // GUI ran, so no console output allowed
 						result = Result.InvalidOutput;
 					}
 					lineCount++;
 				}
 				System.out.println("***end console output***");
 				scan.close();
-				if (lineCount > 7) { // arbitrarily allowing for long usage message
+				if(lineCount > 7) { // arbitrarily allowing for long usage message
 					System.out.println("More output than expected to report GUI isn't available.");
 					result = Result.InvalidOutput;
 				}
-				if (ctProcessExited && lineCount == 0) { // GUI did not run, but no console out
+				if(ctProcessExited && lineCount == 0) { // GUI did not run, but no console out
 					System.out.println("Missing expected 'GUI not available' message.");
 					result = Result.InvalidOutput;
 				}
-			} catch (FileNotFoundException e) {
+			}
+			catch (FileNotFoundException e) {
 				System.out.println("Unexpected FileNotFoundException.");
 				result = Result.InvalidOutput;
 			}
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			result = Result.UnexpectedException;
 			System.out.println("Program crashed with unhandled exception.");
 			e.printStackTrace(System.out);

@@ -47,84 +47,88 @@ public class CircuitBoard {
 	 */
 	public CircuitBoard(String filename) throws FileNotFoundException {
 		Scanner fileScan = new Scanner(new File(filename));
-		//sub scanner to find the size of the board
+		// sub scanner to find the size of the board
 		Scanner line = new Scanner(fileScan.nextLine());
 		try {
 			ROWS = line.nextInt();
 			COLS = line.nextInt();
-			//if the first line has extra values
-			if (line.hasNext()) {
+			// if the first line has extra values
+			if(line.hasNext()) {
 				fileScan.close();
 				line.close();
 				throw new InvalidFileFormatException(filename);
 			}
 		}
-		//if the first line has wrong or not enough values
+		// if the first line has wrong or not enough values
 		catch (InputMismatchException e) {
 			line.close();
 			throw new InvalidFileFormatException(filename);
 		}
 		line.close();
-		//initiate the board
+		// initiate the board
 		board = new char[ROWS][COLS];
 		try {
 			int y = 0;
-			//loop over all the rows
+			// loop over all the rows
 			while (y < ROWS) {
-				//create the scanner for the current row
+				// create the scanner for the current row
 				Scanner nextLine = new Scanner(fileScan.nextLine());
 				int x = 0;
-				//loop over all the columns in the row
+				// loop over all the columns in the row
 				while (x < COLS) {
-					//find the character
+					// find the character
 					char temp = nextLine.next().charAt(0);
-					//make sure its a value char
-					if (ALLOWED_CHARS.indexOf(temp) == -1 && temp != 'T') {
+					// make sure its a value char
+					if(ALLOWED_CHARS.indexOf(temp) == -1 && temp != 'T') {
 						nextLine.close();
 						fileScan.close();
 						throw new InvalidFileFormatException(filename);
 					}
-					//add it to the board
+					// add it to the board
 					board[y][x] = temp;
-					//if its the starting point, and it is null, instantiate the starting point
-					if (temp == '1' && startingPoint == null)
+					// if its the starting point, and it is null, instantiate the starting point
+					if(temp == '1' && startingPoint == null)
 						startingPoint = new Point(y, x);
-					//if there already is a staring node and it finds another, throw a file format exception
-					else if (startingPoint != null && temp == '1') {
+					// if there already is a staring node and it finds another, throw a file format
+					// exception
+					else if(startingPoint != null && temp == '1') {
 						nextLine.close();
 						fileScan.close();
 						throw new InvalidFileFormatException(filename);
 					}
-					//if it finds a ending point, and it is null, instantiate the ending point
-					if (temp == '2' && endingPoint == null)
+					// if it finds a ending point, and it is null, instantiate the ending point
+					if(temp == '2' && endingPoint == null)
 						endingPoint = new Point(y, x);
-					//if there is already a ending node and it finds another ending node, throw a file format exception
-					else if (endingPoint != null && temp == '2') {
+					// if there is already a ending node and it finds another ending node, throw a
+					// file format exception
+					else if(endingPoint != null && temp == '2') {
 						nextLine.close();
 						fileScan.close();
 						throw new InvalidFileFormatException(filename);
 					}
-					//increment the column pointer
+					// increment the column pointer
 					x++;
 				}
-				//if there are more values the columns throw an error
-				if (nextLine.hasNext()) {
+				// if there are more values the columns throw an error
+				if(nextLine.hasNext()) {
 					nextLine.close();
 					fileScan.close();
 					throw new InvalidFileFormatException(filename);
 				}
-				//increment the rows
+				// increment the rows
 				y++;
 				nextLine.close();
 			}
-			//if there are more rows than expected or either of the Points are null throw an exception
-			if (fileScan.hasNext() || startingPoint == null || endingPoint == null) {
+			// if there are more rows than expected or either of the Points are null throw
+			// an exception
+			if(fileScan.hasNext() || startingPoint == null || endingPoint == null) {
 				fileScan.close();
 				throw new InvalidFileFormatException(filename);
 			}
 			fileScan.close();
 		}
-		//if any of the rows or columns are to short catch the null pointer and throw a invalid file format exception
+		// if any of the rows or columns are to short catch the null pointer and throw a
+		// invalid file format exception
 		catch (NoSuchElementException e) {
 			throw new InvalidFileFormatException(filename);
 		}
@@ -177,7 +181,7 @@ public class CircuitBoard {
 	 * @return true if position at (row, col) is open
 	 */
 	public boolean isOpen(int row, int col) {
-		if (row < 0 || row >= board.length || col < 0 || col >= board[row].length) {
+		if(row < 0 || row >= board.length || col < 0 || col >= board[row].length) {
 			return false;
 		}
 		return board[row][col] == OPEN;
@@ -191,7 +195,7 @@ public class CircuitBoard {
 	 * @throws OccupiedPositionException if given position is not open
 	 */
 	public void makeTrace(int row, int col) {
-		if (isOpen(row, col)) {
+		if(isOpen(row, col)) {
 			board[row][col] = TRACE;
 		}
 		else {
