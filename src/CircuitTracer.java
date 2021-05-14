@@ -1,4 +1,4 @@
-package circuitBoard;
+
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -105,7 +105,7 @@ public class CircuitTracer {
 				}
 				s += temp + "\n";
 			}
-			//System.out.print(s.strip());
+			System.out.print(s.strip());
 			break;
 		case "-g":
 			// create the window and set it to visible
